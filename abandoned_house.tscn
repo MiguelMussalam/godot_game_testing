@@ -1774,186 +1774,223 @@ shape = SubResource("ConcavePolygonShape3D_336k7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_002/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_2uqop")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_003" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_003/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_gxbwb")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_004" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_004/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_omuym")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_005" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_005/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_ole1d")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_006" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_006/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_8dg3w")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_007" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_007/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_syji5")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_008" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_008/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_yx0nl")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_009" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_009/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_q2hdi")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_010" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_010/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_6y4d2")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_011" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_011/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_6wc1x")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_012" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_012/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_yaf3l")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_013" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_013/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_f00rv")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_014" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_014/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_rpxbn")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_015" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_015/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_jthvg")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_016" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_016/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_y4bor")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_017" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_017/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_t3gqx")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_018" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_018/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_d1kak")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_019" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_019/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_320xe")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_020" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_020/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_61ksm")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_021" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_021/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_8ubse")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_022" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_022/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_gbpcy")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_023" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_023/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_yqb3k")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_024" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_024/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_uhphu")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_025" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_025/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_eisoh")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_026" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_026/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_m87x8")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_027" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_027/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_0pc0v")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_028" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_028/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_62y2a")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_029" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_029/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_y6tp0")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_030" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_030/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_ibdwa")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_031" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_031/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_56vqr")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_032" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_032/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_e8t2r")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_033" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_033/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_lepe8")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_034" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_034/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_f328d")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_035" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_035/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_pfdli")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_036" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_036/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_6xu5s")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura_001" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura_001/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_8qu8x")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Trash/Basura" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trash/Basura/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_s35uj")
+disabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Barriles/Barril_001" index="0"]
 

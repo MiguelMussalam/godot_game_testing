@@ -42,6 +42,34 @@ var DEFAULT_FOV := 60.0
 var ZOOM_SPEED := 5.0
 var target_fov := DEFAULT_FOV
 
+## Passos
+var non_repeat_passos = []
+var passo_dir_esq := 0
+@onready var PASSOS : AudioStreamPlayer3D = $Passos
+@onready var sons_de_passo = [
+	load("res://Sound effects/Passos/Sound 02.wav"),
+	load("res://Sound effects/Passos/Sound 03.wav"),
+	load("res://Sound effects/Passos/Sound 04.wav"),
+	load("res://Sound effects/Passos/Sound 05.wav"),
+	load("res://Sound effects/Passos/Sound 06.wav"),
+	load("res://Sound effects/Passos/Sound 07.wav"),
+	load("res://Sound effects/Passos/Sound 08.wav"),
+	load("res://Sound effects/Passos/Sound 09.wav"),
+	load("res://Sound effects/Passos/Sound 10.wav"),
+	load("res://Sound effects/Passos/Sound 11.wav"),
+	load("res://Sound effects/Passos/Sound 12.wav"),
+	load("res://Sound effects/Passos/Sound 13.wav"),
+	load("res://Sound effects/Passos/Sound 14.wav"),
+	load("res://Sound effects/Passos/Sound 15.wav"),
+	load("res://Sound effects/Passos/Sound 16.wav"),
+	load("res://Sound effects/Passos/Sound 17.wav"),
+	load("res://Sound effects/Passos/Sound 18.wav"),
+	load("res://Sound effects/Passos/Sound 19.wav"),
+]
+
+## RayCast de escada
+var alvo_subida := -1.0
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	default_position = CAMERA.position
@@ -75,10 +103,9 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 
 func _update_headbob(delta, is_moving):
-	print(head_bob_multiplier)
 	target_head_tilt = lerp(target_head_tilt, MAX_HEAD_TILT * bob_phase, head_bob_multiplier * delta)
 	head_bob_multiplier = 3
-	if is_moving:
+	if is_moving and is_on_floor():
 		bob_timer += delta * BOB_SPEED
 		var offset_y = abs(sin(bob_timer)) * BOB_AMOUNT_Y
 
@@ -86,6 +113,7 @@ func _update_headbob(delta, is_moving):
 		if last_offset_y > 0.01 and offset_y <= 0.01:
 			bob_phase *= -1
 			head_bob_multiplier = 8
+			_toca_som_passo()
 			
 		last_offset_y = offset_y
 		CAMERA.position = default_position + Vector3(0, offset_y, 0)
@@ -98,7 +126,7 @@ func _update_headbob(delta, is_moving):
 	# Sempre suaviza para o alvo:
 	CAMERA.rotation.z = lerp_angle(CAMERA.rotation.z, target_head_tilt, 10 * delta)
 
-func _update_lanterna(delta, _is_moving):
+func _update_lanterna(delta, is_moving):
 	#if _is_moving:
 	#	swing_timer += delta * SWING_SPEED
 	#	var swing_angle = sin(swing_timer) * SWING_AMOUNT
@@ -126,6 +154,38 @@ func _update_lanterna(delta, _is_moving):
 	# Aplica o resultado de volta na Basis da lanterna
 	LANTERNA.global_transform.basis = Basis(slerped_quat)
 
+func _toca_som_passo():
+	if non_repeat_passos.size() == 5:
+		non_repeat_passos = []
+		
+	var som_escolhido = sons_de_passo[randi() % sons_de_passo.size()]
+	
+	while som_escolhido in non_repeat_passos:
+		som_escolhido = sons_de_passo[randi() % sons_de_passo.size()]
+		
+	non_repeat_passos.append(som_escolhido)
+	if passo_dir_esq == 0:
+		PASSOS.position.x = -0.3
+		passo_dir_esq = 1
+	else:
+		PASSOS.position.x = 0.3
+		passo_dir_esq = 0
+	PASSOS.stream = som_escolhido
+	PASSOS.play()
+	
+func _checa_degrau():
+	if is_on_wall():
+		var low_hit = %RayCastFrontLow.is_colliding()
+		var high_clear = not %RayCastFrontHigh.is_colliding()
+
+		if low_hit and high_clear and %RayCastTopDown.is_colliding():
+			var hit_y = %RayCastTopDown.get_collision_point().y
+			alvo_subida = hit_y + 0.7  # ou ajuste fino com +0.1 ou +0.3
+			global_position.y = alvo_subida
+	
+	
+
+
 func _physics_process(delta):
 	CAMERA.fov = lerp(CAMERA.fov, target_fov, ZOOM_SPEED * delta)
 	_update_camera(delta)
@@ -134,10 +194,6 @@ func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -151,6 +207,8 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		_is_moving = false
+
+	_checa_degrau()
 
 	_update_headbob(delta, _is_moving)
 	move_and_slide()

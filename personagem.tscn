@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgexwc2e1thjw"]
+[gd_scene load_steps=6 format=3 uid="uid://bgexwc2e1thjw"]
 
 [ext_resource type="Script" uid="uid://bf0xsrf04cvee" path="res://personagem.gd" id="1_s304p"]
 
@@ -13,6 +13,8 @@ dof_blur_near_transition = 2.0
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_s304p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vvf27"]
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_s304p"]
 
 [node name="Personagem" type="CharacterBody3D"]
 script = ExtResource("1_s304p")
@@ -30,3 +32,25 @@ mesh = SubResource("CapsuleMesh_s304p")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_vvf27")
+
+[node name="Passos" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.06896, 0)
+stream = SubResource("AudioStreamWAV_s304p")
+
+[node name="RayCastFrontHigh" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.369141, 0)
+target_position = Vector3(0, 0, -0.69)
+collide_with_areas = true
+
+[node name="RayCastFrontLow" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 0)
+target_position = Vector3(0, 0, -0.6)
+collide_with_areas = true
+
+[node name="RayCastTopDown" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.263, -0.6)
+target_position = Vector3(0, -3, 0)
+collide_with_areas = true
