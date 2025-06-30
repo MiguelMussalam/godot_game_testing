@@ -18,7 +18,6 @@ var _player_rotation : Vector3
 var _camera_rotation : Vector3
 var _rotation_input : float
 var _tilt_input : float
-
 ## Headbobbing
 const BOB_AMOUNT_Y = 0.06
 const BOB_SPEED = 5
@@ -42,30 +41,46 @@ var DEFAULT_FOV := 60.0
 var ZOOM_SPEED := 5.0
 var target_fov := DEFAULT_FOV
 
+## Depth of Field
+var DEFAULT_DOF := 25.0
+var ZOOM_DOF := 35.0
+var DOF_SPEED := 3
+var target_dof := DEFAULT_DOF
+
 ## Passos
 var non_repeat_passos = []
 var passo_dir_esq := 0
 @onready var PASSOS : AudioStreamPlayer3D = $Passos
-@onready var sons_de_passo = [
-	load("res://Sound effects/Passos/Sound 02.wav"),
-	load("res://Sound effects/Passos/Sound 03.wav"),
-	load("res://Sound effects/Passos/Sound 04.wav"),
-	load("res://Sound effects/Passos/Sound 05.wav"),
-	load("res://Sound effects/Passos/Sound 06.wav"),
-	load("res://Sound effects/Passos/Sound 07.wav"),
-	load("res://Sound effects/Passos/Sound 08.wav"),
-	load("res://Sound effects/Passos/Sound 09.wav"),
-	load("res://Sound effects/Passos/Sound 10.wav"),
-	load("res://Sound effects/Passos/Sound 11.wav"),
-	load("res://Sound effects/Passos/Sound 12.wav"),
-	load("res://Sound effects/Passos/Sound 13.wav"),
-	load("res://Sound effects/Passos/Sound 14.wav"),
-	load("res://Sound effects/Passos/Sound 15.wav"),
-	load("res://Sound effects/Passos/Sound 16.wav"),
-	load("res://Sound effects/Passos/Sound 17.wav"),
-	load("res://Sound effects/Passos/Sound 18.wav"),
-	load("res://Sound effects/Passos/Sound 19.wav"),
-]
+
+@onready var sons_de_passo : Dictionary = {
+	"Grama": [
+		load("res://Sound effects/PassosGrama/Sound 02.wav"),
+		load("res://Sound effects/PassosGrama/Sound 03.wav"),
+		load("res://Sound effects/PassosGrama/Sound 04.wav"),
+		load("res://Sound effects/PassosGrama/Sound 05.wav"),
+		load("res://Sound effects/PassosGrama/Sound 06.wav"),
+		load("res://Sound effects/PassosGrama/Sound 07.wav"),
+		load("res://Sound effects/PassosGrama/Sound 08.wav"),
+		load("res://Sound effects/PassosGrama/Sound 09.wav"),
+		load("res://Sound effects/PassosGrama/Sound 10.wav"),
+		load("res://Sound effects/PassosGrama/Sound 11.wav"),
+		load("res://Sound effects/PassosGrama/Sound 12.wav"),
+		load("res://Sound effects/PassosGrama/Sound 13.wav"),
+		load("res://Sound effects/PassosGrama/Sound 14.wav"),
+		load("res://Sound effects/PassosGrama/Sound 15.wav"),
+		load("res://Sound effects/PassosGrama/Sound 16.wav"),
+		load("res://Sound effects/PassosGrama/Sound 17.wav"),
+		load("res://Sound effects/PassosGrama/Sound 18.wav"),
+		load("res://Sound effects/PassosGrama/Sound 19.wav"),
+	],
+	"Madeira": [
+		load("res://Sound effects/PassosMadeira/Sound 01.wav"),
+		load("res://Sound effects/PassosMadeira/Sound 02.wav"),
+		load("res://Sound effects/PassosMadeira/Sound 03.wav"),
+		load("res://Sound effects/PassosMadeira/Sound 04.wav"),
+		load("res://Sound effects/PassosMadeira/Sound 05.wav"),
+	]
+}
 
 ## RayCast de escada
 var alvo_subida := -1.0
@@ -83,8 +98,14 @@ func _unhandled_input(event):
 	
 	if Input.is_action_just_pressed("zoom"):
 		target_fov = ZOOM_FOV
-	elif Input.is_action_just_released("zoom"):
+		target_dof = ZOOM_DOF
+		
+	if Input.is_action_just_released("zoom"):
 		target_fov = DEFAULT_FOV
+		target_dof = DEFAULT_DOF
+		
+	if Input.is_action_just_pressed("lanterna"):
+		LANTERNA.visible = !LANTERNA.visible
 
 func _update_camera(delta):
 	_mouse_rotation.x += _tilt_input * delta
@@ -155,15 +176,26 @@ func _update_lanterna(delta, is_moving):
 	LANTERNA.global_transform.basis = Basis(slerped_quat)
 
 func _toca_som_passo():
-	if non_repeat_passos.size() == 5:
-		non_repeat_passos = []
-		
-	var som_escolhido = sons_de_passo[randi() % sons_de_passo.size()]
+	var som_escolhido : AudioStreamWAV
+	if %ChecaGrupoChao.is_colliding():
+		var chao = %ChecaGrupoChao.get_collider()
+		var lista_passos := []
+
+		if chao.is_in_group("Grama"):
+			lista_passos = sons_de_passo["Grama"]
+		elif chao.is_in_group("Madeira"):
+			lista_passos = sons_de_passo["Madeira"]
+
+		if lista_passos.size() > 0:
+			if non_repeat_passos.size() >= lista_passos.size():
+				non_repeat_passos.clear()
+
+			som_escolhido = lista_passos[randi() % lista_passos.size()]
+			while som_escolhido in non_repeat_passos:
+				som_escolhido = lista_passos[randi() % lista_passos.size()]
+
+			non_repeat_passos.append(som_escolhido)
 	
-	while som_escolhido in non_repeat_passos:
-		som_escolhido = sons_de_passo[randi() % sons_de_passo.size()]
-		
-	non_repeat_passos.append(som_escolhido)
 	if passo_dir_esq == 0:
 		PASSOS.position.x = -0.3
 		passo_dir_esq = 1
@@ -182,12 +214,12 @@ func _checa_degrau():
 			var hit_y = %RayCastTopDown.get_collision_point().y
 			alvo_subida = hit_y + 0.7  # ou ajuste fino com +0.1 ou +0.3
 			global_position.y = alvo_subida
-	
-	
-
 
 func _physics_process(delta):
+
 	CAMERA.fov = lerp(CAMERA.fov, target_fov, ZOOM_SPEED * delta)
+	CAMERA.attributes.dof_blur_far_distance = lerp(CAMERA.attributes.dof_blur_far_distance, target_dof, DOF_SPEED * delta)
+
 	_update_camera(delta)
 	_update_lanterna(delta, _is_moving)
 	
@@ -199,6 +231,7 @@ func _physics_process(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	print(direction)
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
@@ -209,6 +242,5 @@ func _physics_process(delta):
 		_is_moving = false
 
 	_checa_degrau()
-
 	_update_headbob(delta, _is_moving)
 	move_and_slide()

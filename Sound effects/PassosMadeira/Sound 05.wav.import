@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://d4mypaiaacci8"
+path="res://.godot/imported/Sound 05.wav-0ab9f93b6f993d116e30fb6227e1539a.sample"
+
+[deps]
+
+source_file="res://Sound effects/PassosMadeira/Sound 05.wav"
+dest_files=["res://.godot/imported/Sound 05.wav-0ab9f93b6f993d116e30fb6227e1539a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

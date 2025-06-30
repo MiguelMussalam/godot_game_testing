@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://bgexwc2e1thjw" path="res://personagem.tscn" id="2_fw4w5"]
 [ext_resource type="Script" uid="uid://cwej7yenb3w1o" path="res://pause.gd" id="3_fw4w5"]
 [ext_resource type="AudioStream" uid="uid://lsqfo8q0wk56" path="res://Sound effects/524203__filmmakersmanual__forest-wind-04.wav" id="4_otwa2"]
-[ext_resource type="Script" uid="uid://t61flyxmdxlp" path="res://audio_background.gd" id="5_aou4a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fw4w5"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -22,11 +21,16 @@ ambient_light_source = 1
 ambient_light_energy = 10.6
 tonemap_mode = 3
 tonemap_exposure = 2.0
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.07
 volumetric_fog_emission = Color(0.269359, 0.285589, 0.281665, 1)
+
+[sub_resource type="FogMaterial" id="FogMaterial_otwa2"]
+density = -1.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fw4w5"]
 emission_shape_offset = Vector3(250, 4.165, 64.185)
@@ -58,7 +62,7 @@ size = Vector3(0.05, 0.05, 0.05)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
 
 [node name="Personagem" parent="." instance=ExtResource("2_fw4w5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.4843, 0.747003, -43.1089)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.6003, 0.747003, -28.0848)
 MOUSE_SENSITIVITY = 0.25
 
 [node name="Node3D" type="Node3D" parent="."]
@@ -66,13 +70,20 @@ MOUSE_SENSITIVITY = 0.25
 [node name="Lanterna" type="SpotLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.2683, 0.538102, -23.9831)
 light_color = Color(0.98449, 0.960169, 0.891614, 1)
+light_cull_mask = 4294967293
 shadow_enabled = true
-spot_range = 4.599
+shadow_caster_mask = 4294967293
+spot_range = 7.637
 spot_angle = 24.8
 spot_angle_attenuation = 3.73214
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fw4w5")
+
+[node name="FogVolume" type="FogVolume" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.3297, 1.68654, -35.6612)
+size = Vector3(13.5953, 10.4023, 20.3835)
+material = SubResource("FogMaterial_otwa2")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -271.816, 1.46923, -69.3898)
@@ -94,7 +105,7 @@ script = ExtResource("3_fw4w5")
 
 [node name="Audio_background" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_otwa2")
-volume_db = -20.0
+volume_db = -25.0
 pitch_scale = 0.6
 autoplay = true
-script = ExtResource("5_aou4a")
+bus = &"Background"
