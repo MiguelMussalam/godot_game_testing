@@ -54,31 +54,49 @@ var passo_dir_esq := 0
 
 @onready var sons_de_passo : Dictionary = {
 	"Grama": [
-		load("res://Sound effects/PassosGrama/Sound 02.wav"),
-		load("res://Sound effects/PassosGrama/Sound 03.wav"),
-		load("res://Sound effects/PassosGrama/Sound 04.wav"),
-		load("res://Sound effects/PassosGrama/Sound 05.wav"),
-		load("res://Sound effects/PassosGrama/Sound 06.wav"),
-		load("res://Sound effects/PassosGrama/Sound 07.wav"),
-		load("res://Sound effects/PassosGrama/Sound 08.wav"),
-		load("res://Sound effects/PassosGrama/Sound 09.wav"),
-		load("res://Sound effects/PassosGrama/Sound 10.wav"),
-		load("res://Sound effects/PassosGrama/Sound 11.wav"),
-		load("res://Sound effects/PassosGrama/Sound 12.wav"),
-		load("res://Sound effects/PassosGrama/Sound 13.wav"),
-		load("res://Sound effects/PassosGrama/Sound 14.wav"),
-		load("res://Sound effects/PassosGrama/Sound 15.wav"),
-		load("res://Sound effects/PassosGrama/Sound 16.wav"),
-		load("res://Sound effects/PassosGrama/Sound 17.wav"),
-		load("res://Sound effects/PassosGrama/Sound 18.wav"),
-		load("res://Sound effects/PassosGrama/Sound 19.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_01.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_02.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_03.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_04.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_05.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_06.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_07.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_08.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_09.wav"),
+		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_10.wav"),
 	],
 	"Madeira": [
-		load("res://Sound effects/PassosMadeira/Sound 01.wav"),
-		load("res://Sound effects/PassosMadeira/Sound 02.wav"),
-		load("res://Sound effects/PassosMadeira/Sound 03.wav"),
-		load("res://Sound effects/PassosMadeira/Sound 04.wav"),
-		load("res://Sound effects/PassosMadeira/Sound 05.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_01.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_02.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_03.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_04.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_05.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_06.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_07.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_08.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_09.wav"),
+		load("res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_10.wav"),
+	],
+	"Azuleijo": [
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_01.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_02.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_03.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_04.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_05.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_06.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_07.wav"),
+		load("res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_08.wav"),
+	],
+	"Pedra": [
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_01.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_02.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_03.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_04.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_05.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_06.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_07.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_08.wav"),
+		load("res://Sound effects/PassosPedra/Footsteps_Rock_Walk_09.wav"),
 	]
 }
 
@@ -179,12 +197,17 @@ func _toca_som_passo():
 	var som_escolhido : AudioStreamWAV
 	if %ChecaGrupoChao.is_colliding():
 		var chao = %ChecaGrupoChao.get_collider()
+		print(chao.get_groups())
 		var lista_passos := []
 
 		if chao.is_in_group("Grama"):
 			lista_passos = sons_de_passo["Grama"]
 		elif chao.is_in_group("Madeira"):
 			lista_passos = sons_de_passo["Madeira"]
+		elif chao.is_in_group("Azuleijo"):
+			lista_passos = sons_de_passo["Azuleijo"]
+		elif chao.is_in_group("Pedra"):
+			lista_passos = sons_de_passo["Pedra"]
 
 		if lista_passos.size() > 0:
 			if non_repeat_passos.size() >= lista_passos.size():
@@ -231,7 +254,6 @@ func _physics_process(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	print(direction)
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED

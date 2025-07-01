@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ch772v0nmxbgk"
+path="res://.godot/imported/Footsteps_Tile_Walk_02.wav-b5951acc1c5fe34275dda93e5e08fb49.sample"
+
+[deps]
+
+source_file="res://Sound effects/PassosAzuleijo/Footsteps_Tile_Walk_02.wav"
+dest_files=["res://.godot/imported/Footsteps_Tile_Walk_02.wav-b5951acc1c5fe34275dda93e5e08fb49.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

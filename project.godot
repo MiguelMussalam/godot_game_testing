@@ -27,6 +27,8 @@ version_control/autoload_on_startup=true
 
 Madeira=""
 Grama=""
+Pedra=""
+Azuleijo=""
 
 [input]
 

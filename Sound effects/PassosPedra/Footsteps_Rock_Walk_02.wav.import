@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://5b7dp3srslqt"
+path="res://.godot/imported/Footsteps_Rock_Walk_02.wav-73e716ace3e008b02b688d5ef1c7ce99.sample"
+
+[deps]
+
+source_file="res://Sound effects/PassosPedra/Footsteps_Rock_Walk_02.wav"
+dest_files=["res://.godot/imported/Footsteps_Rock_Walk_02.wav-73e716ace3e008b02b688d5ef1c7ce99.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

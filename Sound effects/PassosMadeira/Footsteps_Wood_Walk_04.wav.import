@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dta8ucwx7niwu"
+path="res://.godot/imported/Footsteps_Wood_Walk_04.wav-05aac5b6caa922ebe017ea5c64b27d94.sample"
+
+[deps]
+
+source_file="res://Sound effects/PassosMadeira/Footsteps_Wood_Walk_04.wav"
+dest_files=["res://.godot/imported/Footsteps_Wood_Walk_04.wav-05aac5b6caa922ebe017ea5c64b27d94.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
