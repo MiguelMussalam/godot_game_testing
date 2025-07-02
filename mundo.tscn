@@ -1,21 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://bheyky50oypth"]
+[gd_scene load_steps=13 format=3 uid="uid://bheyky50oypth"]
 
 [ext_resource type="PackedScene" uid="uid://bdyskr836c5gu" path="res://abandoned_house.tscn" id="1_fw4w5"]
 [ext_resource type="PackedScene" uid="uid://bgexwc2e1thjw" path="res://personagem.tscn" id="2_fw4w5"]
-[ext_resource type="Shader" uid="uid://ojn30tjnrwb3" path="res://camera.gdshader" id="3_5ckkb"]
 [ext_resource type="Script" uid="uid://cwej7yenb3w1o" path="res://pause.gd" id="3_fw4w5"]
 [ext_resource type="AudioStream" uid="uid://lsqfo8q0wk56" path="res://Sound effects/524203__filmmakersmanual__forest-wind-04.wav" id="4_otwa2"]
 [ext_resource type="AudioStream" uid="uid://twoeo4ic1rpj" path="res://Sound effects/musica_ambiente.wav" id="5_aou4a"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2hh7m"]
-shader = ExtResource("3_5ckkb")
-shader_parameter/grain_amount = 0.203
-shader_parameter/grain_size = 0.272
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vvf27"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_t8jxu"]
-material = SubResource("ShaderMaterial_vvf27")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fw4w5"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -80,23 +69,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
 [node name="Personagem" parent="." instance=ExtResource("2_fw4w5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.7483, -0.105242, -12.7703)
 MOUSE_SENSITIVITY = 0.25
-
-[node name="CanvasLayer2" type="CanvasLayer" parent="Personagem"]
-follow_viewport_enabled = true
-
-[node name="ColorRect" type="ColorRect" parent="Personagem/CanvasLayer2"]
-material = SubResource("ShaderMaterial_2hh7m")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="ShaderCamera" type="MeshInstance3D" parent="Personagem/CanvasLayer2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537958, 0)
-mesh = SubResource("PlaneMesh_t8jxu")
-skeleton = NodePath("../../CameraController")
 
 [node name="Node3D" type="Node3D" parent="."]
 

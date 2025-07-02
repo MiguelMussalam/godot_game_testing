@@ -1,13 +1,57 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgexwc2e1thjw"]
+[gd_scene load_steps=16 format=3 uid="uid://bgexwc2e1thjw"]
 
 [ext_resource type="Script" uid="uid://bf0xsrf04cvee" path="res://personagem.gd" id="1_s304p"]
+[ext_resource type="Shader" uid="uid://ojn30tjnrwb3" path="res://Shaders/AberraçãoCromatica.gdshader" id="2_vvf27"]
+[ext_resource type="Shader" uid="uid://u7slv08615om" path="res://Shaders/ps1.gdshader" id="3_k0c8s"]
+[ext_resource type="Shader" uid="uid://3qx2gywjusyy" path="res://Shaders/Grain.gdshader" id="4_s3elh"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_s304p"]
 exposure_multiplier = 2.0
-auto_exposure_enabled = true
 dof_blur_far_enabled = true
 dof_blur_near_enabled = true
 auto_exposure_min_sensitivity = 500.0
+
+[sub_resource type="Curve" id="Curve_vvf27"]
+_data = [Vector2(0, 0.932584), 0.0, -0.432584, 0, 1, Vector2(1, 0.5), -0.432584, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_k0c8s"]
+curve = SubResource("Curve_vvf27")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0c8s"]
+render_priority = 0
+shader = ExtResource("2_vvf27")
+shader_parameter/distance_curve = SubResource("CurveTexture_k0c8s")
+shader_parameter/aberration_strength = 0.015
+
+[sub_resource type="QuadMesh" id="QuadMesh_s304p"]
+material = SubResource("ShaderMaterial_k0c8s")
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3elh"]
+render_priority = 0
+shader = ExtResource("3_k0c8s")
+shader_parameter/enable_fog = true
+shader_parameter/fog_color = Color(0, 0, 0, 1)
+shader_parameter/noise_color = Color(0.311856, 0.0598596, 0.0607076, 1)
+shader_parameter/fog_distance = 100.0
+shader_parameter/fog_fade_range = 50.0
+shader_parameter/enable_noise = true
+shader_parameter/noise_time_fac = 4.0
+shader_parameter/enable_color_limitation = true
+shader_parameter/color_levels = 128
+shader_parameter/enable_dithering = true
+shader_parameter/dither_strength = 0.3
+
+[sub_resource type="QuadMesh" id="QuadMesh_114o1"]
+material = SubResource("ShaderMaterial_s3elh")
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_114o1"]
+shader = ExtResource("4_s3elh")
+shader_parameter/pixel = 0.2
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_s304p"]
 
@@ -26,6 +70,25 @@ attributes = SubResource("CameraAttributesPractical_s304p")
 current = true
 fov = 37.8493
 frustum_offset = Vector2(0.895, 0)
+
+[node name="AberracaoCromatica" type="MeshInstance3D" parent="CameraController/Camera3D"]
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_s304p")
+
+[node name="PS1" type="MeshInstance3D" parent="CameraController/Camera3D"]
+mesh = SubResource("QuadMesh_114o1")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CameraController/Camera3D"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CameraController/Camera3D/CanvasLayer"]
+material = SubResource("ShaderMaterial_114o1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_s304p")

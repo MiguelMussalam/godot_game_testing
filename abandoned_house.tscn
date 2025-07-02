@@ -3181,6 +3181,7 @@ spot_angle_attenuation = 0.138697
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Vecindario/Poste_Luz" index="2"]
 transform = Transform3D(4.28993, 0, 0, 0, 0.403644, 4.2709, 0, -4.2709, 0.403644, 0, 32.6978, 10.0406)
 stream = ExtResource("3_wudet")
+autoplay = true
 emission_angle_enabled = true
 emission_angle_degrees = 58.2
 emission_angle_filter_attenuation_db = -4.2
@@ -3188,6 +3189,7 @@ emission_angle_filter_attenuation_db = -4.2
 [node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="Vecindario/Poste_Luz" index="3"]
 transform = Transform3D(4.28993, 0, 0, 0, 0.403644, 4.2709, 0, -4.2709, 0.403644, -194.055, 27.8128, 10.0406)
 stream = ExtResource("3_wudet")
+autoplay = true
 emission_angle_enabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Vecindario/Poste_Luz" index="4"]
