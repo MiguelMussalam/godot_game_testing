@@ -147,7 +147,6 @@ func _update_headbob(delta, is_moving):
 	if is_moving and is_on_floor():
 		bob_timer += delta * BOB_SPEED
 		var offset_y = abs(sin(bob_timer)) * BOB_AMOUNT_Y
-
 		# Detecta a pisada (mínimo da curva)
 		if last_offset_y > 0.01 and offset_y <= 0.01:
 			bob_phase *= -1
@@ -160,23 +159,22 @@ func _update_headbob(delta, is_moving):
 		bob_timer = 0.0
 		last_offset_y = 0.0
 		target_head_tilt = 0.0  # volta ao centro
-		CAMERA.position = CAMERA.position.lerp(default_position, 10 * delta)
-	
+		CAMERA.position = CAMERA.position.lerp(default_position, 10 * delta)	
 	# Sempre suaviza para o alvo:
 	CAMERA.rotation.z = lerp_angle(CAMERA.rotation.z, target_head_tilt, 10 * delta)
 
 func _update_lanterna(delta, is_moving):
-	#if _is_moving:
-	#	swing_timer += delta * SWING_SPEED
-	#	var swing_angle = sin(swing_timer) * SWING_AMOUNT
+	if _is_moving:
+		swing_timer += delta * SWING_SPEED
+		var swing_angle = sin(swing_timer) * SWING_AMOUNT
 
-	#	# Cria rotação em Z para "balanço lateral"
-	#	var swing_rot = Basis.from_euler(Vector3(0, 0, swing_angle))
-	#	LANTERNA.transform.basis = swing_rot * LANTERNA.transform.basis
-	#else:
-	#	# Volta suavemente ao centro
-	#	LANTERNA.transform.basis = LANTERNA.transform.basis.slerp(LANTERNA.basis, 5 * delta)
-	#	swing_timer = 0.0
+		# Cria rotação em Z para "balanço lateral"
+		var swing_rot = Basis.from_euler(Vector3(0, 0, swing_angle))
+		LANTERNA.transform.basis = swing_rot * LANTERNA.transform.basis
+	else:
+		# Volta suavemente ao centro
+		LANTERNA.transform.basis = LANTERNA.transform.basis.slerp(LANTERNA.basis, 5 * delta)
+		swing_timer = 0.0
 	LANTERNA.position = CAMERA.global_position
 	var target_dir = -CAMERA.global_transform.basis.z
 
@@ -197,7 +195,6 @@ func _toca_som_passo():
 	var som_escolhido : AudioStreamWAV
 	if %ChecaGrupoChao.is_colliding():
 		var chao = %ChecaGrupoChao.get_collider()
-		print(chao.get_groups())
 		var lista_passos := []
 
 		if chao.is_in_group("Grama"):

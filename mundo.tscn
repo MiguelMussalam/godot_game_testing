@@ -16,8 +16,9 @@ sun_angle_max = 0.0
 sky_material = SubResource("ProceduralSkyMaterial_fw4w5")
 
 [sub_resource type="Environment" id="Environment_fw4w5"]
-background_mode = 2
+background_mode = 5
 sky = SubResource("Sky_otwa2")
+ambient_light_source = 3
 ambient_light_energy = 10.6
 tonemap_mode = 3
 tonemap_exposure = 2.0
@@ -75,12 +76,13 @@ MOUSE_SENSITIVITY = 0.25
 [node name="Lanterna" type="SpotLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.2683, 0.538102, -23.9831)
 light_color = Color(0.98449, 0.960169, 0.891614, 1)
-light_cull_mask = 4294967293
 shadow_enabled = true
 shadow_caster_mask = 4294967293
-spot_range = 7.637
-spot_angle = 24.8
-spot_angle_attenuation = 3.73214
+distance_fade_shadow = 699.37
+spot_range = 8.0
+spot_attenuation = 2.0
+spot_angle = 30.0
+spot_angle_attenuation = 0.392293
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fw4w5")
@@ -92,6 +94,7 @@ material = SubResource("FogMaterial_otwa2")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -271.816, 1.46923, -69.3898)
+visible = false
 amount = 60000
 lifetime = 4.0
 fixed_fps = 5
