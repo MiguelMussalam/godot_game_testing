@@ -29,6 +29,7 @@ shader_parameter/aberration_strength = 0.015
 lightmap_size_hint = Vector2i(12, 12)
 material = SubResource("ShaderMaterial_k0c8s")
 flip_faces = true
+add_uv2 = true
 size = Vector2(2, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s3elh"]
@@ -71,27 +72,27 @@ shader_parameter/glitch_amount = 0.131
 [node name="Personagem" type="CharacterBody3D"]
 script = ExtResource("1_s304p")
 
-[node name="CameraController" type="Node3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537958, 0)
 
-[node name="Camera3D" type="Camera3D" parent="CameraController"]
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.379539, 0)
 attributes = SubResource("CameraAttributesPractical_s304p")
 current = true
 fov = 37.8493
 frustum_offset = Vector2(0.895, 0)
 
-[node name="AberracaoCromatica" type="MeshInstance3D" parent="CameraController/Camera3D"]
+[node name="AberracaoCromatica" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_s304p")
 
-[node name="PS1" type="MeshInstance3D" parent="CameraController/Camera3D"]
+[node name="PS1" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
 visible = false
 mesh = SubResource("QuadMesh_114o1")
 
-[node name="Grain" type="CanvasLayer" parent="CameraController/Camera3D"]
+[node name="Grain" type="CanvasLayer" parent="CameraPivot/Camera3D"]
 
-[node name="ColorRect" type="ColorRect" parent="CameraController/Camera3D/Grain"]
+[node name="ColorRect" type="ColorRect" parent="CameraPivot/Camera3D/Grain"]
 material = SubResource("ShaderMaterial_114o1")
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,9 +101,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="FishEye" type="CanvasLayer" parent="CameraController/Camera3D"]
+[node name="FishEye" type="CanvasLayer" parent="CameraPivot/Camera3D"]
 
-[node name="ColorRect" type="ColorRect" parent="CameraController/Camera3D/FishEye"]
+[node name="ColorRect" type="ColorRect" parent="CameraPivot/Camera3D/FishEye"]
 material = SubResource("ShaderMaterial_gn376")
 anchors_preset = 15
 anchor_right = 1.0

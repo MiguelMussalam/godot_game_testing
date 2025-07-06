@@ -1,23 +1,35 @@
 extends CharacterBody3D
 
-@onready var CAMERA : Camera3D = $CameraController/Camera3D
+@onready var camera := $CameraPivot/Camera3D
+@onready var camera_pivot := $CameraPivot
 @onready var LANTERNA : SpotLight3D = $"../Node3D/Lanterna"
 
+
 ## player
-@export var SPEED = 2.5
-@export var JUMP_VELOCITY = 3
-var _is_moving : bool = false
+@export var VELOCIDADE_ANDANDO := 2.5
+@export var VELOCIDADE_CORRENDO := 3.5
+@export var VELOCIDADE_COSTAS := 1.5
+var velocidade_atual = VELOCIDADE_ANDANDO
+var movendo := false
+var costas := false
+var correndo := false
+
+## Contador de passos
+var passo_andando := 0.6
+var passo_correndo := 0.4
+var passo_costas := 0.9
+var passo_timer := passo_andando
 
 ## Mouse e câmera
 @export var MOUSE_SENSITIVITY : float = 0.5
 @export var tilt_up_limit = deg_to_rad(85)
 @export var tilt_down_limit = deg_to_rad(-85)
-var _mouse_input : bool = false
 var _mouse_rotation : Vector3
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
 var _rotation_input : float
 var _tilt_input : float
+
 ## Headbobbing
 const BOB_AMOUNT_Y = 0.06
 const BOB_SPEED = 5
@@ -47,11 +59,10 @@ var ZOOM_DOF := 35.0
 var DOF_SPEED := 3
 var target_dof := DEFAULT_DOF
 
-## Passos
+## Sons passos
 var non_repeat_passos = []
 var passo_dir_esq := 0
 @onready var PASSOS : AudioStreamPlayer3D = $Passos
-
 @onready var sons_de_passo : Dictionary = {
 	"Grama": [
 		load("res://Sound effects/PassosGrama/Footsteps_Walk_Grass_Mono_01.wav"),
@@ -105,91 +116,64 @@ var alvo_subida := -1.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	default_position = CAMERA.position
+	default_position = camera.position
 	default_rot = LANTERNA.transform
 
 func _unhandled_input(event):
-	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
-	if _mouse_input:
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
-	
-	if Input.is_action_just_pressed("zoom"):
-		target_fov = ZOOM_FOV
-		target_dof = ZOOM_DOF
-		
-	if Input.is_action_just_released("zoom"):
-		target_fov = DEFAULT_FOV
-		target_dof = DEFAULT_DOF
-		
-	if Input.is_action_just_pressed("lanterna"):
-		LANTERNA.visible = !LANTERNA.visible
+		return
+
+	if event is InputEventMouseButton:
+		if Input.is_action_just_pressed("zoom"):
+			target_fov = ZOOM_FOV
+			target_dof = ZOOM_DOF
+
+		elif Input.is_action_just_released("zoom"):
+			target_fov = DEFAULT_FOV
+			target_dof = DEFAULT_DOF
+
+	if event is InputEventKey:
+		if Input.is_action_just_pressed("lanterna"):
+			LANTERNA.visible = !LANTERNA.visible
+
+		elif Input.is_action_just_pressed("Correr"):
+			correndo = true
+
+		elif Input.is_action_just_released("Correr"):
+			correndo = false
+		return
 
 func _update_camera(delta):
 	_mouse_rotation.x += _tilt_input * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, tilt_down_limit, tilt_up_limit)
 	_mouse_rotation.y += _rotation_input * delta
-	
+
 	_player_rotation = Vector3(0.0,_mouse_rotation.y,0.0)
 	_camera_rotation = Vector3(_mouse_rotation.x,0.0,0.0)
 
-	CAMERA.transform.basis = Basis.from_euler(_camera_rotation)
+	camera.transform.basis = Basis.from_euler(_camera_rotation)
 	global_transform.basis = Basis.from_euler(_player_rotation)
-	
-	CAMERA.rotation.z = 0.0
+
+	camera.rotation.z = 0.0
 
 	_rotation_input = 0.0
 	_tilt_input = 0.0
 
-func _update_headbob(delta, is_moving):
-	target_head_tilt = lerp(target_head_tilt, MAX_HEAD_TILT * bob_phase, head_bob_multiplier * delta)
-	head_bob_multiplier = 3
-	if is_moving and is_on_floor():
-		bob_timer += delta * BOB_SPEED
-		var offset_y = abs(sin(bob_timer)) * BOB_AMOUNT_Y
-		# Detecta a pisada (mínimo da curva)
-		if last_offset_y > 0.01 and offset_y <= 0.01:
-			bob_phase *= -1
-			head_bob_multiplier = 8
+func passo(delta):
+	if is_on_floor() and velocity.length() >= 0.1:
+		passo_timer -= delta
+		if passo_timer <= 0.0:
 			_toca_som_passo()
-			
-		last_offset_y = offset_y
-		CAMERA.position = default_position + Vector3(0, offset_y, 0)
-	else:
-		bob_timer = 0.0
-		last_offset_y = 0.0
-		target_head_tilt = 0.0  # volta ao centro
-		CAMERA.position = CAMERA.position.lerp(default_position, 10 * delta)	
-	# Sempre suaviza para o alvo:
-	CAMERA.rotation.z = lerp_angle(CAMERA.rotation.z, target_head_tilt, 10 * delta)
-
-func _update_lanterna(delta, is_moving):
-	if _is_moving:
-		swing_timer += delta * SWING_SPEED
-		var swing_angle = sin(swing_timer) * SWING_AMOUNT
-
-		# Cria rotação em Z para "balanço lateral"
-		var swing_rot = Basis.from_euler(Vector3(0, 0, swing_angle))
-		LANTERNA.transform.basis = swing_rot * LANTERNA.transform.basis
-	else:
-		# Volta suavemente ao centro
-		LANTERNA.transform.basis = LANTERNA.transform.basis.slerp(LANTERNA.basis, 5 * delta)
-		swing_timer = 0.0
-	LANTERNA.position = CAMERA.global_position
-	var target_dir = -CAMERA.global_transform.basis.z
-
-	# Cria o novo Basis que olha na direção da câmera
-	var target_basis = Basis.looking_at(target_dir, Vector3.UP)
-
-	# Converte os dois Basis para Quaternions
-	var from_quat = LANTERNA.global_transform.basis.get_rotation_quaternion()
-	var to_quat = target_basis.get_rotation_quaternion()
-
-	# Faz a interpolação esférica
-	var slerped_quat = from_quat.slerp(to_quat, 5 * delta)
-
-	# Aplica o resultado de volta na Basis da lanterna
-	LANTERNA.global_transform.basis = Basis(slerped_quat)
+			print("Passo!")
+			if correndo:
+				passo_timer = passo_correndo
+			else:
+				if costas:
+					passo_timer = passo_costas
+				else:
+					passo_timer = passo_andando
 
 func _toca_som_passo():
 	var som_escolhido : AudioStreamWAV
@@ -205,6 +189,8 @@ func _toca_som_passo():
 			lista_passos = sons_de_passo["Azuleijo"]
 		elif chao.is_in_group("Pedra"):
 			lista_passos = sons_de_passo["Pedra"]
+		else:
+			return
 
 		if lista_passos.size() > 0:
 			if non_repeat_passos.size() >= lista_passos.size():
@@ -222,10 +208,71 @@ func _toca_som_passo():
 	else:
 		PASSOS.position.x = 0.3
 		passo_dir_esq = 0
+	
 	PASSOS.stream = som_escolhido
 	PASSOS.play()
-	
-func _checa_degrau():
+
+func headbob(delta,direcao, movendo):
+	if movendo and is_on_floor():
+		direcao = -direcao * 0.03
+		camera_pivot.rotation.z = lerp_angle(camera_pivot.rotation.z, direcao, delta * 5)
+	if movendo == false or is_on_floor() == false:
+		camera_pivot.rotation.z = lerp_angle(camera_pivot.rotation.z, 0.0, delta * 10)
+
+
+"
+func _update_headbob(delta, is_moving):
+	target_head_tilt = lerp(target_head_tilt, MAX_HEAD_TILT * bob_phase, head_bob_multiplier * delta)
+	head_bob_multiplier = 3
+	if is_moving and is_on_floor():
+		bob_timer += delta * BOB_SPEED
+		var offset_y = abs(sin(bob_timer)) * BOB_AMOUNT_Y
+		# Detecta a pisada (mínimo da curva)
+		if last_offset_y > 0.01 and offset_y <= 0.01:
+			bob_phase *= -1
+			head_bob_multiplier = 8
+			_toca_som_passo()
+			
+		last_offset_y = offset_y
+		camera.position = default_position + Vector3(0, offset_y, 0)
+	else:
+		bob_timer = 0.0
+		last_offset_y = 0.0
+		target_head_tilt = 0.0  # volta ao centro
+		camera.position = camera.position.lerp(default_position, 10 * delta)
+	# Sempre suaviza para o alvo:
+	camera.rotation.z = lerp_angle(camera.rotation.z, target_head_tilt, 10 * delta)
+"
+
+func _update_lanterna(delta, is_moving):
+	if movendo:
+		swing_timer += delta * SWING_SPEED
+		var swing_angle = sin(swing_timer) * SWING_AMOUNT
+
+		# Cria rotação em Z para "balanço lateral"
+		var swing_rot = Basis.from_euler(Vector3(0, 0, swing_angle))
+		LANTERNA.transform.basis = swing_rot * LANTERNA.transform.basis
+	else:
+		# Volta suavemente ao centro
+		LANTERNA.transform.basis = LANTERNA.transform.basis.slerp(LANTERNA.basis, 5 * delta)
+		swing_timer = 0.0
+	LANTERNA.position = camera.global_position
+	var target_dir = -camera.global_transform.basis.z
+
+	# Cria o novo Basis que olha na direção da câmera
+	var target_basis = Basis.looking_at(target_dir, Vector3.UP)
+
+	# Converte os dois Basis para Quaternions
+	var from_quat = LANTERNA.global_transform.basis.get_rotation_quaternion()
+	var to_quat = target_basis.get_rotation_quaternion()
+
+	# Faz a interpolação esférica
+	var slerped_quat = from_quat.slerp(to_quat, 5 * delta)
+
+	# Aplica o resultado de volta na Basis da lanterna
+	LANTERNA.global_transform.basis = Basis(slerped_quat)
+
+func checa_degrau():
 	if is_on_wall():
 		var low_hit = %RayCastFrontLow.is_colliding()
 		var high_clear = not %RayCastFrontHigh.is_colliding()
@@ -237,29 +284,36 @@ func _checa_degrau():
 
 func _physics_process(delta):
 
-	CAMERA.fov = lerp(CAMERA.fov, target_fov, ZOOM_SPEED * delta)
-	CAMERA.attributes.dof_blur_far_distance = lerp(CAMERA.attributes.dof_blur_far_distance, target_dof, DOF_SPEED * delta)
+	camera.fov = lerp(camera.fov, target_fov, ZOOM_SPEED * delta)
+	camera.attributes.dof_blur_far_distance = lerp(camera.attributes.dof_blur_far_distance, target_dof, DOF_SPEED * delta)
 
 	_update_camera(delta)
-	_update_lanterna(delta, _is_moving)
+	_update_lanterna(delta, movendo)
 	
-	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-		_is_moving = true
+		if correndo == true:
+			velocidade_atual = VELOCIDADE_CORRENDO
+		else:
+			if input_dir.y == 1:
+				velocidade_atual = VELOCIDADE_COSTAS
+				costas = true
+			else:
+				velocidade_atual = VELOCIDADE_ANDANDO
+				costas = false
+		velocity.x = direction.x * velocidade_atual
+		velocity.z = direction.z * velocidade_atual
+		movendo = true
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-		_is_moving = false
+		velocity.x = move_toward(velocity.x, 0, velocidade_atual)
+		velocity.z = move_toward(velocity.z, 0, velocidade_atual)
+		movendo = false
 
-	_checa_degrau()
-	_update_headbob(delta, _is_moving)
+	passo(delta)
+	checa_degrau()
+	headbob(delta, input_dir.x, movendo)
 	move_and_slide()

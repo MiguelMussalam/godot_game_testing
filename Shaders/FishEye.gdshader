@@ -10,19 +10,19 @@ void fragment() {
     // Coordenadas centralizadas
     vec2 uv = (SCREEN_UV - 0.5) * zoom;
     float distance = length(uv);
-    
+
     // Fórmula do Fish Eye (simplificada e otimizada)
     uv *= 1.0 + intensity * distance * distance;
     uv = (uv + 0.5); // Volta para o espaço [0,1]
-    
+
     // Corrige distorção excessiva nas bordas
     uv = clamp(uv, 0.001, 0.999);
-    
+
     // Efeito de glitch nas bordas
     if (distance > 0.7) {
         uv.x += sin(TIME * 30.0) * glitch_amount;
     }
-    
+
     // Cor final
     COLOR = texture(SCREEN_TEXTURE, uv);
 }
