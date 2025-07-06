@@ -1,61 +1,37 @@
-[gd_scene load_steps=14 format=3 uid="uid://bheyky50oypth"]
+[gd_scene load_steps=9 format=3 uid="uid://bheyky50oypth"]
 
 [ext_resource type="PackedScene" uid="uid://bdyskr836c5gu" path="res://abandoned_house.tscn" id="1_fw4w5"]
+[ext_resource type="Environment" uid="uid://du8jtbh03v3oj" path="res://mundo.tres" id="2_2hh7m"]
 [ext_resource type="PackedScene" uid="uid://bgexwc2e1thjw" path="res://personagem.tscn" id="2_fw4w5"]
 [ext_resource type="Script" uid="uid://cwej7yenb3w1o" path="res://pause.gd" id="3_fw4w5"]
 [ext_resource type="AudioStream" uid="uid://lsqfo8q0wk56" path="res://Sound effects/524203__filmmakersmanual__forest-wind-04.wav" id="4_otwa2"]
 [ext_resource type="AudioStream" uid="uid://twoeo4ic1rpj" path="res://Sound effects/musica_ambiente.wav" id="5_aou4a"]
 [ext_resource type="VoxelGIData" uid="uid://dy0bvgrqhg4tc" path="res://mundo.VoxelGI_data.res" id="6_5ckkb"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fw4w5"]
-sky_top_color = Color(0, 0, 0, 1)
-sky_horizon_color = Color(0.188963, 0.175863, 0.183477, 1)
-sky_curve = 0.439226
-
-[sub_resource type="Sky" id="Sky_otwa2"]
-sky_material = SubResource("ProceduralSkyMaterial_fw4w5")
-
-[sub_resource type="Environment" id="Environment_fw4w5"]
-background_mode = 2
-sky = SubResource("Sky_otwa2")
-ambient_light_source = 3
-reflected_light_source = 2
-tonemap_mode = 3
-ssr_enabled = true
-ssao_enabled = true
-ssil_enabled = true
-glow_enabled = true
-volumetric_fog_enabled = true
-volumetric_fog_emission = Color(0.41777, 0.413195, 0.388627, 1)
-
 [sub_resource type="FogMaterial" id="FogMaterial_otwa2"]
 density = -1.0
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fw4w5"]
-emission_shape_offset = Vector3(250, 4.165, 64.185)
-emission_shape_scale = Vector3(270, 1, 66.815)
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
-direction = Vector3(1, -1, 0)
-gravity = Vector3(0, -0.8, 0)
-turbulence_noise_strength = 0.3
-turbulence_noise_scale = 5.0
-collision_mode = 1
-collision_friction = 0.0
-collision_bounce = 0.0
-collision_use_scale = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fw4w5"]
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
-[sub_resource type="BoxMesh" id="BoxMesh_otwa2"]
-material = SubResource("StandardMaterial3D_fw4w5")
-size = Vector3(0.05, 0.05, 0.05)
-
 [node name="mundo" type="Node3D"]
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+subdiv = 3
+size = Vector3(389.323, 74.417, 398.35)
+data = ExtResource("6_5ckkb")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_2hh7m")
+
+[node name="FogVolume" type="FogVolume" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.5764, 1.68654, -35.6612)
+size = Vector3(35.7428, 10.4023, 20.3835)
+material = SubResource("FogMaterial_otwa2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.866024, -0.433015, 0.250001, 0.0784765, 0.376088, 0.923255, -0.493806, 0.81918, -0.29172, -56.7231, 25.7125, -144.504)
+light_color = Color(0.287309, 0.279731, 0.311896, 1)
+light_bake_mode = 1
+shadow_enabled = true
+directional_shadow_blend_splits = true
 
 [node name="Abandoned_House" parent="." instance=ExtResource("1_fw4w5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
@@ -75,40 +51,6 @@ distance_fade_shadow = 699.37
 spot_attenuation = 2.0
 spot_angle = 25.61
 spot_angle_attenuation = 0.420449
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_fw4w5")
-
-[node name="FogVolume" type="FogVolume" parent="WorldEnvironment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.3297, 1.68654, -35.6612)
-size = Vector3(13.5953, 10.4023, 20.3835)
-material = SubResource("FogMaterial_otwa2")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 4.92495, 20.1658, 0)
-light_color = Color(0, 0, 0, 1)
-light_bake_mode = 1
-shadow_enabled = true
-
-[node name="VoxelGI" type="VoxelGI" parent="WorldEnvironment"]
-subdiv = 3
-size = Vector3(389.323, 74.417, 398.35)
-data = ExtResource("6_5ckkb")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -271.816, 1.46923, -69.3898)
-visible = false
-amount = 60000
-lifetime = 4.0
-fixed_fps = 5
-collision_base_size = 0.05
-visibility_aabb = AABB(-6.22, -6.67, -4, 500, 11.925, 133.06)
-process_material = SubResource("ParticleProcessMaterial_fw4w5")
-draw_pass_1 = SubResource("BoxMesh_otwa2")
-
-[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.43763, -5.88932)
-size = Vector3(134.13, 0.54126, 9.78845)
 
 [node name="Pause" type="Node" parent="."]
 process_mode = 3

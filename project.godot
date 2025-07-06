@@ -23,6 +23,10 @@ window/size/viewport_height=1080
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/SphynxMotionBlurToolkit/plugin.cfg")
+
 [global_group]
 
 Madeira=""

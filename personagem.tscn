@@ -1,46 +1,104 @@
-[gd_scene load_steps=18 format=3 uid="uid://bgexwc2e1thjw"]
+[gd_scene load_steps=33 format=3 uid="uid://bgexwc2e1thjw"]
 
 [ext_resource type="Script" uid="uid://bf0xsrf04cvee" path="res://personagem.gd" id="1_s304p"]
 [ext_resource type="Shader" uid="uid://ojn30tjnrwb3" path="res://Shaders/AberraçãoCromatica.gdshader" id="2_vvf27"]
 [ext_resource type="Shader" uid="uid://u7slv08615om" path="res://Shaders/ps1.gdshader" id="3_k0c8s"]
+[ext_resource type="CameraAttributesPractical" uid="uid://cbtbc0eg3mn3w" path="res://camera.tres" id="3_p7k75"]
+[ext_resource type="Resource" uid="uid://cslvcweyejh3c" path="res://addons/SphynxMotionBlurToolkit/PreBlurProcessing/default_camera_movement_component.tres" id="3_qtdk8"]
+[ext_resource type="Resource" uid="uid://iru8ynu04i00" path="res://addons/SphynxMotionBlurToolkit/PreBlurProcessing/default_camera_rotation_component.tres" id="4_cidpc"]
 [ext_resource type="Shader" uid="uid://3qx2gywjusyy" path="res://Shaders/Grain.gdshader" id="4_s3elh"]
+[ext_resource type="Resource" uid="uid://rp3mpjmisoyh" path="res://addons/SphynxMotionBlurToolkit/PreBlurProcessing/default_object_movement_component.tres" id="5_4cdg6"]
 [ext_resource type="Shader" uid="uid://v16e1yxvd7a1" path="res://Shaders/FishEye.gdshader" id="5_114o1"]
+[ext_resource type="Resource" uid="uid://c8ulad7utgrg7" path="res://addons/SphynxMotionBlurToolkit/PreBlurProcessing/pre_blur_processing_stage.tres" id="6_2jceu"]
+[ext_resource type="Script" uid="uid://crd473dudr0ew" path="res://addons/SphynxMotionBlurToolkit/PreBlurProcessing/pre_blur_processor.gd" id="7_jnbs7"]
+[ext_resource type="Resource" uid="uid://ca45noqewsyvp" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_experimental_blur_stage.tres" id="8_en6ei"]
+[ext_resource type="Resource" uid="uid://cvb65hfs2lrxo" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_neighbor_max_stage.tres" id="9_d7snr"]
+[ext_resource type="Resource" uid="uid://bidsfymvdyhek" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_overlay_stage.tres" id="10_37m8p"]
+[ext_resource type="Script" uid="uid://coqiya0up4jfu" path="res://addons/SphynxMotionBlurToolkit/Guertin/new_guertin_motion_blur.gd" id="11_qqs8o"]
+[ext_resource type="Resource" uid="uid://dipvwksvqb3dm" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_tile_max_x_stage.tres" id="12_4rabl"]
+[ext_resource type="Resource" uid="uid://bxfg45ubc2pv7" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_tile_max_y_stage.tres" id="13_mq83f"]
+[ext_resource type="Resource" uid="uid://bqehecsdgt70s" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_tile_variance_stage.tres" id="14_845wv"]
+[ext_resource type="Script" uid="uid://gsmeout6w0t6" path="res://addons/SphynxMotionBlurToolkit/BaseClasses/mb_compositor.gd" id="15_73hqi"]
 
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_s304p"]
-auto_exposure_enabled = true
-dof_blur_far_enabled = true
-dof_blur_near_enabled = true
-auto_exposure_min_sensitivity = 500.0
+[sub_resource type="CompositorEffect" id="CompositorEffect_qy06j"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("7_jnbs7")
+pre_blur_processor_stage = ExtResource("6_2jceu")
+camera_rotation_component = ExtResource("4_cidpc")
+camera_movement_component = ExtResource("3_qtdk8")
+object_movement_component = ExtResource("5_4cdg6")
+debug = false
+metadata/_custom_type_script = "uid://crd473dudr0ew"
 
-[sub_resource type="Curve" id="Curve_vvf27"]
+[sub_resource type="CompositorEffect" id="CompositorEffect_6q1ok"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("11_qqs8o")
+blur_stage = ExtResource("8_en6ei")
+overlay_stage = ExtResource("10_37m8p")
+tile_max_x_stage = ExtResource("12_4rabl")
+tile_max_y_stage = ExtResource("13_mq83f")
+neighbor_max_stage = ExtResource("9_d7snr")
+tile_variance_stage = ExtResource("14_845wv")
+tile_size = 40
+linear_falloff_slope = 1.0
+importance_bias = 40.0
+maximum_jitter_value = 0.95
+minimum_user_threshold = 1.5
+debug = false
+metadata/_custom_type_script = "uid://coqiya0up4jfu"
+
+[sub_resource type="Compositor" id="Compositor_asatx"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_qy06j"), SubResource("CompositorEffect_6q1ok")])
+script = ExtResource("15_73hqi")
+samples = 16
+intensity = 1.0
+center_fade = 0.0
+framerate_independent = true
+uncapped_independence = false
+target_constant_framerate = 30.0
+metadata/_custom_type_script = "uid://gsmeout6w0t6"
+
+[sub_resource type="Curve" id="Curve_gn376"]
 _data = [Vector2(0, 0.5), 0.0, 0.0, 0, 1, Vector2(1, 0.5), 0.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_k0c8s"]
-curve = SubResource("Curve_vvf27")
+[sub_resource type="CurveTexture" id="CurveTexture_p7k75"]
+curve = SubResource("Curve_gn376")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0c8s"]
-render_priority = 0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7k75"]
 shader = ExtResource("2_vvf27")
-shader_parameter/distance_curve = SubResource("CurveTexture_k0c8s")
-shader_parameter/aberration_strength = 0.015
+shader_parameter/distance_curve = SubResource("CurveTexture_p7k75")
+shader_parameter/aberration_strength = 0.01
 
-[sub_resource type="QuadMesh" id="QuadMesh_s304p"]
-lightmap_size_hint = Vector2i(12, 12)
-material = SubResource("ShaderMaterial_k0c8s")
-flip_faces = true
-add_uv2 = true
-size = Vector2(2, 2)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_114o1"]
+shader = ExtResource("4_s3elh")
+shader_parameter/strength = 30.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gn376"]
+shader = ExtResource("5_114o1")
+shader_parameter/intensity = 0.4
+shader_parameter/zoom = 0.9
+shader_parameter/glitch_amount = 0.131
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s3elh"]
 render_priority = 0
 shader = ExtResource("3_k0c8s")
-shader_parameter/enable_fog = true
+shader_parameter/enable_fog = false
 shader_parameter/fog_color = Color(0, 0, 0, 1)
-shader_parameter/noise_color = Color(0.311856, 0.0598596, 0.0607076, 1)
+shader_parameter/noise_color = Color(0, 0, 0, 1)
 shader_parameter/fog_distance = 100.0
 shader_parameter/fog_fade_range = 50.0
-shader_parameter/enable_noise = true
+shader_parameter/enable_noise = false
 shader_parameter/noise_time_fac = 4.0
 shader_parameter/enable_color_limitation = true
 shader_parameter/color_levels = 128
@@ -52,16 +110,6 @@ lightmap_size_hint = Vector2i(12, 12)
 material = SubResource("ShaderMaterial_s3elh")
 flip_faces = true
 size = Vector2(2, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_114o1"]
-shader = ExtResource("4_s3elh")
-shader_parameter/strength = 30.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gn376"]
-shader = ExtResource("5_114o1")
-shader_parameter/intensity = 0.4
-shader_parameter/zoom = 0.9
-shader_parameter/glitch_amount = 0.131
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_s304p"]
 
@@ -77,18 +125,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537958, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.379539, 0)
-attributes = SubResource("CameraAttributesPractical_s304p")
+attributes = ExtResource("3_p7k75")
+compositor = SubResource("Compositor_asatx")
 current = true
-fov = 37.8493
+fov = 60.0
 frustum_offset = Vector2(0.895, 0)
 
-[node name="AberracaoCromatica" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
-extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_s304p")
+[node name="Aberracao" type="CanvasLayer" parent="CameraPivot/Camera3D"]
 
-[node name="PS1" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
-visible = false
-mesh = SubResource("QuadMesh_114o1")
+[node name="ColorRect" type="ColorRect" parent="CameraPivot/Camera3D/Aberracao"]
+material = SubResource("ShaderMaterial_p7k75")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="Grain" type="CanvasLayer" parent="CameraPivot/Camera3D"]
 
@@ -111,6 +163,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="PS1" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
+visible = false
+mesh = SubResource("QuadMesh_114o1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_s304p")

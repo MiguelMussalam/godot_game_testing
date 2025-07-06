@@ -4,10 +4,9 @@ extends CharacterBody3D
 @onready var camera_pivot := $CameraPivot
 @onready var LANTERNA : SpotLight3D = $"../Node3D/Lanterna"
 
-
 ## player
 @export var VELOCIDADE_ANDANDO := 2.5
-@export var VELOCIDADE_CORRENDO := 3.5
+@export var VELOCIDADE_CORRENDO := 9
 @export var VELOCIDADE_COSTAS := 1.5
 var velocidade_atual = VELOCIDADE_ANDANDO
 var movendo := false
@@ -283,7 +282,6 @@ func checa_degrau():
 			global_position.y = alvo_subida
 
 func _physics_process(delta):
-
 	camera.fov = lerp(camera.fov, target_fov, ZOOM_SPEED * delta)
 	camera.attributes.dof_blur_far_distance = lerp(camera.attributes.dof_blur_far_distance, target_dof, DOF_SPEED * delta)
 
