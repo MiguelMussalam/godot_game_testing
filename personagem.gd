@@ -184,19 +184,16 @@ func olhar(event: InputEventMouseMotion)-> void:
 	add_pitch(motion.y)
 	clamp_pitch()
 
-# A nova função de passo baseada em distância
+## A nova função de passo baseada em distância
 func passo(delta):
-	# Só calculamos se estivermos no chão
 	if not is_on_floor():
 		deu_passo = false
 		return
 
 	if is_on_floor() and current_state != PlayerState.IDLE:
-		# Calcula a distância percorrida neste frame (ignorando o eixo Y)
 		var velocidade_horizontal = velocity * Vector3(1, 0, 1)
 		distancia_percorrida += velocidade_horizontal.length() * delta
 		
-		# Define a distância necessária para o próximo passo com base no estado atual
 		var distancia_necessaria: float
 		if current_state == PlayerState.RUNNING:
 			distancia_necessaria = distancia_passo_correndo
@@ -205,16 +202,12 @@ func passo(delta):
 		elif current_state == PlayerState.WALKING_BACKWARDS:
 			distancia_necessaria = distancia_passo_costas
 
-		# Se a distância percorrida exceder a necessária...
 		if distancia_percorrida > distancia_necessaria:
-			# Acionamos o passo
 			deu_passo = true
 			_toca_som_passo()
 			
-			# Resetamos o contador, mas mantemos o "excesso" para não perder precisão
 			distancia_percorrida -= distancia_necessaria
 		else:
-			# Se não atingimos a distância, garantimos que deu_passo seja falso
 			deu_passo = false
 
 func _toca_som_passo():
@@ -222,7 +215,6 @@ func _toca_som_passo():
 	if %ChecaGrupoChao.is_colliding():
 		var chao = %ChecaGrupoChao.get_collider()
 		var lista_passos := []
-
 		if chao.is_in_group("Grama"):
 			lista_passos = sons_de_passo["Grama"]
 		elif chao.is_in_group("Madeira"):
@@ -255,20 +247,16 @@ func _toca_som_passo():
 	PASSOS.play()
 
 func _handle_head_bob(delta, direcao):
-	# Se estiver no ar, apenas retorne suavemente à posição padrão.
 	if not is_on_floor():
 		camera_pivot.position = camera_pivot.position.lerp(default_position, delta * 10.0)
 		camera.rotation.z = lerp_angle(camera.rotation.z, default_rotation.z, delta * 10.0)
 		return
 	
 	var lerp_weight = delta * 10.0
-	# --- Lógica para quando o jogador está se movendo ---
 	if current_state != PlayerState.IDLE:
-		# Resetamos a onda a cada passo para criar o efeito de "impacto"
 		if deu_passo:
 			bob_time = 0.0
 		
-		# A frequência agora é dinâmica, baseada na velocidade!
 		bob_time += delta * velocity.length() * bob_frequency
 		
 		# Cálculos de Bob
@@ -279,9 +267,7 @@ func _handle_head_bob(delta, direcao):
 		var target_head_pos = Vector3(default_position.x, bob_pos_y, default_position.z)
 		camera_pivot.position = camera_pivot.position.lerp(target_head_pos, lerp_weight)
 		camera.rotation.z = lerp_angle(camera.rotation.z, bob_rot_z, lerp_weight)
-	# --- Lógica para quando o jogador está parado (IDLE) ---
 	else:
-		# Aqui usamos uma onda contínua para o balanço de repouso
 		bob_time += delta * idle_sway_frequency
 		
 		var sway_pos_y = default_position.y + sin(bob_time) * idle_sway_amplitude
