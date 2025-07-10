@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bgexwc2e1thjw"]
+[gd_scene load_steps=36 format=3 uid="uid://bgexwc2e1thjw"]
 
 [ext_resource type="Script" uid="uid://bf0xsrf04cvee" path="res://personagem.gd" id="1_s304p"]
 [ext_resource type="Shader" uid="uid://ojn30tjnrwb3" path="res://Shaders/AberraçãoCromatica.gdshader" id="2_vvf27"]
@@ -19,6 +19,8 @@
 [ext_resource type="Resource" uid="uid://bxfg45ubc2pv7" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_tile_max_y_stage.tres" id="13_mq83f"]
 [ext_resource type="Resource" uid="uid://bqehecsdgt70s" path="res://addons/SphynxMotionBlurToolkit/Guertin/guertin_tile_variance_stage.tres" id="14_845wv"]
 [ext_resource type="Script" uid="uid://gsmeout6w0t6" path="res://addons/SphynxMotionBlurToolkit/BaseClasses/mb_compositor.gd" id="15_73hqi"]
+[ext_resource type="Shader" uid="uid://dxal02hh8asln" path="res://Shaders/LensFlare.gdshader" id="19_cidpc"]
+[ext_resource type="Texture2D" uid="uid://crv00y6mhe44y" path="res://Shaders/lens-flare-light-special-effect-background-free-png.png" id="20_4cdg6"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_qy06j"]
 resource_local_to_scene = false
@@ -90,8 +92,18 @@ shader_parameter/intensity = 0.4
 shader_parameter/zoom = 0.9
 shader_parameter/glitch_amount = 0.131
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4cdg6"]
+shader = ExtResource("19_cidpc")
+shader_parameter/FlareMult = ExtResource("20_4cdg6")
+shader_parameter/Blur = 5.625
+shader_parameter/FlareThreshold = 0.26
+shader_parameter/Flares = 4
+shader_parameter/FlareSpacing = 0.635
+shader_parameter/Intensity = 0.165
+shader_parameter/Saturation_ = 0.28
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s3elh"]
-render_priority = 0
+render_priority = -1
 shader = ExtResource("3_k0c8s")
 shader_parameter/enable_fog = false
 shader_parameter/fog_color = Color(0, 0, 0, 1)
@@ -102,7 +114,7 @@ shader_parameter/enable_noise = false
 shader_parameter/noise_time_fac = 4.0
 shader_parameter/enable_color_limitation = true
 shader_parameter/color_levels = 128
-shader_parameter/enable_dithering = true
+shader_parameter/enable_dithering = false
 shader_parameter/dither_strength = 0.3
 
 [sub_resource type="QuadMesh" id="QuadMesh_114o1"]
@@ -119,6 +131,8 @@ size = Vector2(2, 2)
 
 [node name="Personagem" type="CharacterBody3D"]
 script = ExtResource("1_s304p")
+bob_amplitude_y = 0.055
+idle_sway_frequency = 1.2
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537958, 0)
@@ -128,7 +142,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.379539, 0)
 attributes = ExtResource("3_p7k75")
 compositor = SubResource("Compositor_asatx")
 current = true
-fov = 60.0
 frustum_offset = Vector2(0.895, 0)
 
 [node name="Aberracao" type="CanvasLayer" parent="CameraPivot/Camera3D"]
@@ -164,11 +177,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="LensFLare" type="CanvasLayer" parent="CameraPivot/Camera3D"]
+
+[node name="ColorRect" type="ColorRect" parent="CameraPivot/Camera3D/LensFLare"]
+material = SubResource("ShaderMaterial_4cdg6")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="PS1" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
 visible = false
 mesh = SubResource("QuadMesh_114o1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("CapsuleMesh_s304p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

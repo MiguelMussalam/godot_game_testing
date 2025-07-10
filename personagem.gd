@@ -4,41 +4,47 @@ extends CharacterBody3D
 @onready var camera_pivot := $CameraPivot
 @onready var LANTERNA : SpotLight3D = $"../Node3D/Lanterna"
 
+enum PlayerState { IDLE, WALKING, WALKING_BACKWARDS, RUNNING }
+var current_state = PlayerState.IDLE
+
 ## player
+@export_group("Velocidade")
 @export var VELOCIDADE_ANDANDO := 2.5
 @export var VELOCIDADE_CORRENDO := 9
-@export var VELOCIDADE_COSTAS := 1.5
+@export var VELOCIDADE_COSTAS := 2
 var velocidade_atual = VELOCIDADE_ANDANDO
 var movendo := false
 var costas := false
 var correndo := false
+var deu_passo := false
 
-## Contador de passos
-var passo_andando := 0.6
-var passo_correndo := 0.4
-var passo_costas := 0.9
-var passo_timer := passo_andando
+@export_group("Passos")
+@export var distancia_passo_andando: float = 1.8 # Distância em metros para um passo andando
+@export var distancia_passo_correndo: float = 2.5 # Distância para um passo correndo
+@export var distancia_passo_costas: float = 1.4 # Distância em metros para um passo andando de costas
+var distancia_percorrida: float = 0.0 # Acumulador da distância percorrida
 
 ## Mouse e câmera
-@export var MOUSE_SENSITIVITY : float = 0.5
-@export var tilt_up_limit = deg_to_rad(85)
-@export var tilt_down_limit = deg_to_rad(-85)
-var _mouse_rotation : Vector3
-var _player_rotation : Vector3
-var _camera_rotation : Vector3
-var _rotation_input : float
-var _tilt_input : float
+@export_group("Mouse")
+@export_range(1, 100, 1) var mouse_sensitivity: int = 100
+@export var max_pitch : float = 85
+@export var min_pitch : float = -85
+var mouse_delta := Vector2.ZERO
+var smoothed_mouse_delta := Vector2.ZERO
+const SMOOTHING = 0.5
 
-## Headbobbing
-const BOB_AMOUNT_Y = 0.06
-const BOB_SPEED = 5
-var bob_timer = 0.0
-var default_position: Vector3
-var last_offset_y = 0.0
-var bob_phase = 1  # alterna entre -1 e 1
-var target_head_tilt = 0.0  # valor alvo da rotação
-var head_bob_multiplier = 3
-const MAX_HEAD_TILT = deg_to_rad(5)
+## --- Variáveis do Head Bob ---
+@export_group("Head Bob")
+@export var bob_frequency = 2.0  # Quão rápidos são os "passos"
+@export var bob_amplitude_y = 0.08 # Intensidade do sobe/desce
+@export var bob_amplitude_z_roll = 0.02 # Intensidade da inclinação lateral
+var bob_time := 0.0
+
+@export_group("Idle Sway")
+@export var idle_sway_frequency = 0.3
+@export var idle_sway_amplitude = 0.01
+var default_position := Vector3.ZERO
+var default_rotation := Vector3.ZERO
 
 ## Parâmetros do swing
 const SWING_AMOUNT = deg_to_rad(0.3)  # ângulo máximo (em radianos)
@@ -47,7 +53,7 @@ var swing_timer = 0.0
 var default_rot = Transform3D()  # salvar rotação original
 
 ## Zoom
-var ZOOM_FOV := 40.0
+var ZOOM_FOV := 48.0
 var DEFAULT_FOV := 60.0
 var ZOOM_SPEED := 5.0
 var target_fov := DEFAULT_FOV
@@ -114,14 +120,15 @@ var passo_dir_esq := 0
 var alvo_subida := -1.0
 
 func _ready():
+	Input.set_use_accumulated_input(false)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	default_position = camera.position
+	default_position = camera_pivot.position
+	default_rotation = camera_pivot.rotation
 	default_rot = LANTERNA.transform
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
-		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+		olhar(event)
 		return
 
 	if event is InputEventMouseButton:
@@ -144,35 +151,71 @@ func _unhandled_input(event):
 			correndo = false
 		return
 
-func _update_camera(delta):
-	_mouse_rotation.x += _tilt_input * delta
-	_mouse_rotation.x = clamp(_mouse_rotation.x, tilt_down_limit, tilt_up_limit)
-	_mouse_rotation.y += _rotation_input * delta
+func add_yaw(amount)->void:
+	if is_zero_approx(amount):
+		return
+	
+	self.rotate_object_local(Vector3.DOWN, deg_to_rad(amount))
+	self.orthonormalize()
 
-	_player_rotation = Vector3(0.0,_mouse_rotation.y,0.0)
-	_camera_rotation = Vector3(_mouse_rotation.x,0.0,0.0)
+func add_pitch(amount)->void:
+	if is_zero_approx(amount):
+		return
+	
+	camera_pivot.rotate_object_local(Vector3.LEFT, deg_to_rad(amount))
+	camera_pivot.orthonormalize()
 
-	camera.transform.basis = Basis.from_euler(_camera_rotation)
-	global_transform.basis = Basis.from_euler(_player_rotation)
+func clamp_pitch()->void:
+	if camera_pivot.rotation.x > deg_to_rad(min_pitch) and camera_pivot.rotation.x < deg_to_rad(max_pitch):
+		return
+	
+	camera_pivot.rotation.x = clamp(camera_pivot.rotation.x, deg_to_rad(min_pitch), deg_to_rad(max_pitch))
+	camera_pivot.orthonormalize()
 
-	camera.rotation.z = 0.0
+func olhar(event: InputEventMouseMotion)-> void:
+	var viewport_transform: Transform2D = get_tree().root.get_final_transform()
+	var motion: Vector2 = event.xformed_by(viewport_transform).relative
+	var degrees_per_unit: float = 0.001
+	
+	motion *= mouse_sensitivity
+	motion *= degrees_per_unit
+	
+	add_yaw(motion.x)
+	add_pitch(motion.y)
+	clamp_pitch()
 
-	_rotation_input = 0.0
-	_tilt_input = 0.0
-
+# A nova função de passo baseada em distância
 func passo(delta):
-	if is_on_floor() and velocity.length() >= 0.1:
-		passo_timer -= delta
-		if passo_timer <= 0.0:
+	# Só calculamos se estivermos no chão
+	if not is_on_floor():
+		deu_passo = false
+		return
+
+	if is_on_floor() and current_state != PlayerState.IDLE:
+		# Calcula a distância percorrida neste frame (ignorando o eixo Y)
+		var velocidade_horizontal = velocity * Vector3(1, 0, 1)
+		distancia_percorrida += velocidade_horizontal.length() * delta
+		
+		# Define a distância necessária para o próximo passo com base no estado atual
+		var distancia_necessaria: float
+		if current_state == PlayerState.RUNNING:
+			distancia_necessaria = distancia_passo_correndo
+		elif current_state == PlayerState.WALKING:
+			distancia_necessaria = distancia_passo_andando
+		elif current_state == PlayerState.WALKING_BACKWARDS:
+			distancia_necessaria = distancia_passo_costas
+
+		# Se a distância percorrida exceder a necessária...
+		if distancia_percorrida > distancia_necessaria:
+			# Acionamos o passo
+			deu_passo = true
 			_toca_som_passo()
-			print("Passo!")
-			if correndo:
-				passo_timer = passo_correndo
-			else:
-				if costas:
-					passo_timer = passo_costas
-				else:
-					passo_timer = passo_andando
+			
+			# Resetamos o contador, mas mantemos o "excesso" para não perder precisão
+			distancia_percorrida -= distancia_necessaria
+		else:
+			# Se não atingimos a distância, garantimos que deu_passo seja falso
+			deu_passo = false
 
 func _toca_som_passo():
 	var som_escolhido : AudioStreamWAV
@@ -211,50 +254,50 @@ func _toca_som_passo():
 	PASSOS.stream = som_escolhido
 	PASSOS.play()
 
-func headbob(delta,direcao, movendo):
-	if movendo and is_on_floor():
-		direcao = -direcao * 0.03
-		camera_pivot.rotation.z = lerp_angle(camera_pivot.rotation.z, direcao, delta * 5)
-	if movendo == false or is_on_floor() == false:
-		camera_pivot.rotation.z = lerp_angle(camera_pivot.rotation.z, 0.0, delta * 10)
-
-
-"
-func _update_headbob(delta, is_moving):
-	target_head_tilt = lerp(target_head_tilt, MAX_HEAD_TILT * bob_phase, head_bob_multiplier * delta)
-	head_bob_multiplier = 3
-	if is_moving and is_on_floor():
-		bob_timer += delta * BOB_SPEED
-		var offset_y = abs(sin(bob_timer)) * BOB_AMOUNT_Y
-		# Detecta a pisada (mínimo da curva)
-		if last_offset_y > 0.01 and offset_y <= 0.01:
-			bob_phase *= -1
-			head_bob_multiplier = 8
-			_toca_som_passo()
-			
-		last_offset_y = offset_y
-		camera.position = default_position + Vector3(0, offset_y, 0)
+func _handle_head_bob(delta, direcao):
+	# Se estiver no ar, apenas retorne suavemente à posição padrão.
+	if not is_on_floor():
+		camera_pivot.position = camera_pivot.position.lerp(default_position, delta * 10.0)
+		camera.rotation.z = lerp_angle(camera.rotation.z, default_rotation.z, delta * 10.0)
+		return
+	
+	var lerp_weight = delta * 10.0
+	# --- Lógica para quando o jogador está se movendo ---
+	if current_state != PlayerState.IDLE:
+		# Resetamos a onda a cada passo para criar o efeito de "impacto"
+		if deu_passo:
+			bob_time = 0.0
+		
+		# A frequência agora é dinâmica, baseada na velocidade!
+		bob_time += delta * velocity.length() * bob_frequency
+		
+		# Cálculos de Bob
+		var bob_pos_y = default_position.y + sin(bob_time) * bob_amplitude_y
+		var bob_rot_z = default_rotation.z + cos(bob_time * 0.5) * bob_amplitude_z_roll
+		
+		# Aplicação com lerp
+		var target_head_pos = Vector3(default_position.x, bob_pos_y, default_position.z)
+		camera_pivot.position = camera_pivot.position.lerp(target_head_pos, lerp_weight)
+		camera.rotation.z = lerp_angle(camera.rotation.z, bob_rot_z, lerp_weight)
+	# --- Lógica para quando o jogador está parado (IDLE) ---
 	else:
-		bob_timer = 0.0
-		last_offset_y = 0.0
-		target_head_tilt = 0.0  # volta ao centro
-		camera.position = camera.position.lerp(default_position, 10 * delta)
-	# Sempre suaviza para o alvo:
-	camera.rotation.z = lerp_angle(camera.rotation.z, target_head_tilt, 10 * delta)
-"
+		# Aqui usamos uma onda contínua para o balanço de repouso
+		bob_time += delta * idle_sway_frequency
+		
+		var sway_pos_y = default_position.y + sin(bob_time) * idle_sway_amplitude
+		var sway_rot_z = default_rotation.z + cos(bob_time) * idle_sway_amplitude * 0.5
+		
+		# Aplicação com lerp
+		var target_head_pos = Vector3(default_position.x, sway_pos_y, default_position.z)
+		var target_cam_rot = Vector3(camera.rotation.x, camera.rotation.y, sway_rot_z)
+		
+		camera_pivot.position = camera_pivot.position.lerp(target_head_pos, lerp_weight)
+		camera.rotation = camera.rotation.lerp(target_cam_rot, lerp_weight)
 
+	direcao = -direcao * 0.03
+	camera_pivot.rotation.z = lerp_angle(camera_pivot.rotation.z, direcao, delta * 10)
+		
 func _update_lanterna(delta, is_moving):
-	if movendo:
-		swing_timer += delta * SWING_SPEED
-		var swing_angle = sin(swing_timer) * SWING_AMOUNT
-
-		# Cria rotação em Z para "balanço lateral"
-		var swing_rot = Basis.from_euler(Vector3(0, 0, swing_angle))
-		LANTERNA.transform.basis = swing_rot * LANTERNA.transform.basis
-	else:
-		# Volta suavemente ao centro
-		LANTERNA.transform.basis = LANTERNA.transform.basis.slerp(LANTERNA.basis, 5 * delta)
-		swing_timer = 0.0
 	LANTERNA.position = camera.global_position
 	var target_dir = -camera.global_transform.basis.z
 
@@ -282,36 +325,43 @@ func checa_degrau():
 			global_position.y = alvo_subida
 
 func _physics_process(delta):
+	# Atualiza efeitos de câmera
 	camera.fov = lerp(camera.fov, target_fov, ZOOM_SPEED * delta)
 	camera.attributes.dof_blur_far_distance = lerp(camera.attributes.dof_blur_far_distance, target_dof, DOF_SPEED * delta)
 
-	_update_camera(delta)
 	_update_lanterna(delta, movendo)
 	
+	# Aplica gravidade
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
+	# Pega o input de movimento
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	# Lógica de Movimento e Estado
 	if direction:
-		if correndo == true:
+		if correndo:
 			velocidade_atual = VELOCIDADE_CORRENDO
+			current_state = PlayerState.RUNNING
 		else:
-			if input_dir.y == 1:
+			if input_dir.y == 1: # Andando para trás
 				velocidade_atual = VELOCIDADE_COSTAS
-				costas = true
-			else:
+				current_state = PlayerState.WALKING_BACKWARDS
+			else: # Andando para frente/lados
 				velocidade_atual = VELOCIDADE_ANDANDO
-				costas = false
+				current_state = PlayerState.WALKING
+		
 		velocity.x = direction.x * velocidade_atual
 		velocity.z = direction.z * velocidade_atual
-		movendo = true
 	else:
 		velocity.x = move_toward(velocity.x, 0, velocidade_atual)
 		velocity.z = move_toward(velocity.z, 0, velocidade_atual)
-		movendo = false
+		current_state = PlayerState.IDLE
 
+	move_and_slide()
+	
+	# Funções de Passo, Degrau e Head Bob
 	passo(delta)
 	checa_degrau()
-	headbob(delta, input_dir.x, movendo)
-	move_and_slide()
+	_handle_head_bob(delta,input_dir.x) # Renomeei sua função para seguir a convenção

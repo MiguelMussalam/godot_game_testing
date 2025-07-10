@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var luz_defeito := $Lamparas/Lampara2_004/OmniLight3D
+@onready var lampada := $Lamparas/Lampara2_004
 @onready var som_luz     := $Lamparas/Lampara2_004/AudioStreamPlayer3D
 @onready var player_tv := $"Television /Tele_001/PlayerTV"
 
@@ -19,6 +20,7 @@ func _process(delta: float) -> void:
 	tempo_proximo_piscar -= delta
 	if tempo_proximo_piscar <= 0.0:
 		luz_defeito.visible = !luz_defeito.visible
+		lampada.get_surface_override_material(0).emission_enabled = !lampada.get_surface_override_material(0).emission_enabled 
 		if luz_defeito.visible:
 			som_luz.play()
 		else: 

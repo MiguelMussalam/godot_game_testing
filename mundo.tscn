@@ -38,16 +38,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
 
 [node name="Personagem" parent="." instance=ExtResource("2_fw4w5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.4626, -0.105242, -20.8563)
-MOUSE_SENSITIVITY = 0.25
+distancia_passo_costas = 2.0
+max_pitch = 80.0
+min_pitch = -80.0
 
 [node name="Node3D" type="Node3D" parent="."]
 
 [node name="Lanterna" type="SpotLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.2683, 0.538102, -23.9831)
 light_color = Color(0.98449, 0.960169, 0.891614, 1)
+light_volumetric_fog_energy = 0.0
+light_bake_mode = 1
 shadow_enabled = true
-shadow_caster_mask = 4294967293
 distance_fade_shadow = 699.37
+spot_range = 673.536
 spot_attenuation = 2.0
 spot_angle = 25.61
 spot_angle_attenuation = 0.420449

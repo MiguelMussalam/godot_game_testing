@@ -1,4 +1,4 @@
-[gd_scene load_steps=373 format=3 uid="uid://bdyskr836c5gu"]
+[gd_scene load_steps=379 format=3 uid="uid://bdyskr836c5gu"]
 
 [ext_resource type="PackedScene" uid="uid://ms7hmjvwgkpw" path="res://Abandoned_House/Models/Abandoned_House.glb" id="1_o2ne0"]
 [ext_resource type="Script" uid="uid://cdlf1y0otkv88" path="res://abandoned_house.gd" id="2_la8r6"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bvjfy51bv7c2y" path="res://Abandoned_House/Textures/Foco.png" id="5_gm5wr"]
 [ext_resource type="AudioStream" uid="uid://6vc87sayjv1r" path="res://Videos/video_tv.mp3" id="5_kki0m"]
 [ext_resource type="Texture2D" uid="uid://dsk8u3ouinyg" path="res://Abandoned_House/Models/Abandoned_House_Lampara2 - emisor.png" id="5_u2k1p"]
+[ext_resource type="Texture2D" uid="uid://dmcmoul6l8pko" path="res://Abandoned_House/Models/Abandoned_House_Lampara2.png" id="6_r11ea"]
 [ext_resource type="Shader" uid="uid://bfe5x7bakyr05" path="res://Shaders/glass.gdshader" id="8_ey1n5"]
 [ext_resource type="Texture2D" uid="uid://147tpudnbxp6" path="res://Abandoned_House/Models/Abandoned_House_Foco.png" id="8_rvy0d"]
 [ext_resource type="Texture2D" uid="uid://cxrkjy1sp5xrs" path="res://Abandoned_House/Models/Abandoned_House_Foco - emisor.png" id="9_r11ea"]
@@ -198,6 +199,42 @@ albedo_texture = ExtResource("4_cxcrq")
 emission_enabled = true
 emission_energy_multiplier = 7.0
 emission_texture = ExtResource("5_1nmx4")
+texture_filter = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r11ea"]
+resource_name = "Lampara1"
+cull_mode = 2
+albedo_texture = ExtResource("4_cxcrq")
+emission_enabled = true
+emission_texture = ExtResource("5_1nmx4")
+texture_filter = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uoipe"]
+resource_name = "Lampara2"
+cull_mode = 2
+albedo_texture = ExtResource("6_r11ea")
+emission_texture = ExtResource("5_u2k1p")
+texture_filter = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjubq"]
+resource_name = "Foco"
+cull_mode = 2
+albedo_texture = ExtResource("8_rvy0d")
+emission_enabled = true
+emission_texture = ExtResource("9_r11ea")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dtaar"]
+resource_name = "Foco"
+cull_mode = 2
+albedo_texture = ExtResource("8_rvy0d")
+emission_texture = ExtResource("9_r11ea")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6qhw"]
+resource_name = "Lampara2"
+cull_mode = 2
+albedo_texture = ExtResource("6_r11ea")
+emission_enabled = true
+emission_texture = ExtResource("5_u2k1p")
 texture_filter = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdxe6"]
@@ -433,7 +470,7 @@ viewport_path = NodePath("Television /Tele_001/PlayerTV/SubViewport")
 resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_5lsel")
 emission_enabled = true
-emission_energy_multiplier = 5.0
+emission_energy_multiplier = 16.0
 emission_texture = SubResource("ViewportTexture_kki0m")
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_gm5wr"]
@@ -1450,15 +1487,32 @@ shadow_caster_mask = 4294967294
 distance_fade_enabled = true
 omni_attenuation = 2.0
 
+[node name="Lampara1_001" parent="Lamparas" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara2" parent="Lamparas" index="2"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara2_001" parent="Lamparas" index="3"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara2_002" parent="Lamparas" index="4"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara2_003" parent="Lamparas" index="5"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara2_004" parent="Lamparas" index="6"]
+surface_material_override/0 = SubResource("StandardMaterial3D_uoipe")
+surface_material_override/1 = SubResource("StandardMaterial3D_gjubq")
+
 [node name="OmniLight3D" type="OmniLight3D" parent="Lamparas/Lampara2_004" index="0"]
 transform = Transform3D(2.88604, 0, -1.69407e-21, 0, 2.88604, -2.84217e-14, 0, 0, 2.88604, -0.593096, -0.702179, 0.0106354)
+visible = false
 light_color = Color(1, 0.792157, 0.156863, 1)
-light_energy = 2.0
-light_indirect_energy = 5.0
 light_bake_mode = 1
 shadow_enabled = true
 shadow_caster_mask = 4294967294
-omni_range = 10.0
 omni_attenuation = 2.0
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Lamparas/Lampara2_004" index="1"]
@@ -1469,12 +1523,19 @@ unit_size = 5.0
 pitch_scale = 0.9
 autoplay = true
 
+[node name="Lampara2_005" parent="Lamparas" index="7"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+surface_material_override/1 = SubResource("StandardMaterial3D_dtaar")
+
+[node name="Lampara2_006" parent="Lamparas" index="8"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara2_007" parent="Lamparas" index="9"]
+surface_material_override/0 = SubResource("StandardMaterial3D_l6qhw")
+
 [node name="OmniLight3D" type="OmniLight3D" parent="Lamparas/Lampara2_007" index="0"]
 transform = Transform3D(2.88604, 0, 1.69407e-21, 0, 2.88604, 2.84217e-14, 0, 0, 2.88604, -0.624718, -1.01129, 0.0265579)
-visible = false
 light_color = Color(1, 0.792157, 0.156863, 1)
-light_energy = 2.0
-light_projector = ExtResource("5_u2k1p")
 light_specular = 0.0
 light_bake_mode = 1
 shadow_enabled = true
@@ -1483,12 +1544,15 @@ distance_fade_enabled = true
 omni_attenuation = 2.0
 
 [node name="Lampara2_008" parent="Lamparas" index="10"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
 surface_material_override/1 = SubResource("StandardMaterial3D_cdxe6")
 
 [node name="Lampara2_009" parent="Lamparas" index="11"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
 surface_material_override/1 = SubResource("StandardMaterial3D_wkq46")
 
 [node name="Lampara2_010" parent="Lamparas" index="12"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
 surface_material_override/1 = SubResource("StandardMaterial3D_cdxe6")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Lamparas/Lampara2_010" index="0"]
@@ -1500,12 +1564,36 @@ shadow_enabled = true
 shadow_caster_mask = 4294967294
 distance_fade_enabled = true
 
+[node name="Lampara3" parent="Lamparas" index="13"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara3_001" parent="Lamparas" index="14"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara3_002" parent="Lamparas" index="15"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara3_003" parent="Lamparas" index="16"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara3_004" parent="Lamparas" index="17"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara3_005" parent="Lamparas" index="18"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
 [node name="OmniLight3D" type="OmniLight3D" parent="Lamparas/Lampara3_005" index="0"]
 transform = Transform3D(11.6916, 0, 0, 0, 11.6916, 0, 0, 0, 11.6916, 0.0276184, 5.6398, 0.276245)
 light_color = Color(1, 0.792157, 0.156863, 1)
 shadow_enabled = true
 shadow_caster_mask = 4294967294
 distance_fade_enabled = true
+
+[node name="Lampara3_006" parent="Lamparas" index="19"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
+
+[node name="Lampara3_007" parent="Lamparas" index="20"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Cajones_Puertas/P" index="0"]
 
@@ -2900,6 +2988,9 @@ shape = SubResource("ConcavePolygonShape3D_bng16")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Estufa/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_eej2w")
+
+[node name="Puerta" parent="Casa" index="63"]
+layers = 3
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Casa/Puerta" index="0"]
 
