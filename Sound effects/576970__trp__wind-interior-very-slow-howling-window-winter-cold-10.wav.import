@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ige6dleqefun"
+path="res://.godot/imported/576970__trp__wind-interior-very-slow-howling-window-winter-cold-10.wav-62e0a044b65dc7f58c2146d4590894c7.sample"
+
+[deps]
+
+source_file="res://Sound effects/576970__trp__wind-interior-very-slow-howling-window-winter-cold-10.wav"
+dest_files=["res://.godot/imported/576970__trp__wind-interior-very-slow-howling-window-winter-cold-10.wav-62e0a044b65dc7f58c2146d4590894c7.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

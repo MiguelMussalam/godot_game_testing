@@ -1,5 +1,6 @@
 extends Node3D
 
+@onready var ruido_fora := $RuidoFora
 
 @onready var bus_backroung := AudioServer.get_bus_index("Background")
 var cutoff_alvo := 22000.0
@@ -13,6 +14,7 @@ func _on_area_entrada_body_entered(body: Node3D) -> void:
 	if body.name == "Personagem":
 		cutoff_alvo = 1000.0
 		som_alvo = -80.0
+		ruido_fora.play()
 
 func _on_area_saída_body_entered(body: Node3D) -> void:
 	if body.name == "Personagem":
@@ -21,6 +23,7 @@ func _on_area_saída_body_entered(body: Node3D) -> void:
 		var nodo = get_tree().get_current_scene().get_node("Musica")
 		if nodo.playing == false:
 			nodo.play()
+		ruido_fora.stop()
 
 func _physics_process(delta: float) -> void:
 	cutoff_atual = lerp(cutoff_atual, cutoff_alvo, delta * 4)

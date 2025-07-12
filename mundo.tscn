@@ -37,7 +37,7 @@ directional_shadow_blend_splits = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
 
 [node name="Personagem" parent="." instance=ExtResource("2_fw4w5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.6364, 1.40686, -34.1594)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1766, 1.40686, -41.811)
 max_pitch = 80.0
 min_pitch = -80.0
 distancia_passo_costas = 2.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=382 format=3 uid="uid://bdyskr836c5gu"]
+[gd_scene load_steps=383 format=3 uid="uid://bdyskr836c5gu"]
 
 [ext_resource type="PackedScene" uid="uid://ms7hmjvwgkpw" path="res://Abandoned_House/Models/Abandoned_House.glb" id="1_o2ne0"]
 [ext_resource type="Script" uid="uid://cdlf1y0otkv88" path="res://abandoned_house.gd" id="2_la8r6"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://b081jm6dcrovi" path="res://Sound effects/ZumbidoLuz/637854__kyles__street-lamp-incandescent-electric-hum-before-all-leds.wav" id="3_wudet"]
 [ext_resource type="AudioStream" uid="uid://dl76h0t4et3qd" path="res://Sound effects/ZumbidoLuz/351430__kinoton__neon-lamp-switch-on-hum.wav" id="4_5lsel"]
 [ext_resource type="Texture2D" uid="uid://33m1wqt8fl55" path="res://Abandoned_House/Models/Abandoned_House_Lampara1.png" id="4_cxcrq"]
+[ext_resource type="AudioStream" uid="uid://ige6dleqefun" path="res://Sound effects/576970__trp__wind-interior-very-slow-howling-window-winter-cold-10.wav" id="4_gjubq"]
 [ext_resource type="Texture2D" uid="uid://ctm31uft3817h" path="res://Abandoned_House/Models/Abandoned_House_Lampara1 - emisor.png" id="5_1nmx4"]
 [ext_resource type="Texture2D" uid="uid://bvjfy51bv7c2y" path="res://Abandoned_House/Textures/Foco.png" id="5_gm5wr"]
 [ext_resource type="AudioStream" uid="uid://6vc87sayjv1r" path="res://Videos/video_tv.mp3" id="5_kki0m"]
@@ -1211,6 +1212,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.384073, 0, 0.00695801)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DetectaPersonagem/AreaSaída" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0202789, 0, 0)
 shape = SubResource("BoxShape3D_rnre6")
+
+[node name="RuidoFora" type="AudioStreamPlayer" parent="DetectaPersonagem" index="2"]
+stream = ExtResource("4_gjubq")
+volume_db = -4.0
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Colision/Piso_001" index="0" groups=["Madeira"]]
 
