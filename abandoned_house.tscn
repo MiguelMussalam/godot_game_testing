@@ -1,4 +1,4 @@
-[gd_scene load_steps=379 format=3 uid="uid://bdyskr836c5gu"]
+[gd_scene load_steps=382 format=3 uid="uid://bdyskr836c5gu"]
 
 [ext_resource type="PackedScene" uid="uid://ms7hmjvwgkpw" path="res://Abandoned_House/Models/Abandoned_House.glb" id="1_o2ne0"]
 [ext_resource type="Script" uid="uid://cdlf1y0otkv88" path="res://abandoned_house.gd" id="2_la8r6"]
@@ -14,6 +14,13 @@
 [ext_resource type="Shader" uid="uid://bfe5x7bakyr05" path="res://Shaders/glass.gdshader" id="8_ey1n5"]
 [ext_resource type="Texture2D" uid="uid://147tpudnbxp6" path="res://Abandoned_House/Models/Abandoned_House_Foco.png" id="8_rvy0d"]
 [ext_resource type="Texture2D" uid="uid://cxrkjy1sp5xrs" path="res://Abandoned_House/Models/Abandoned_House_Foco - emisor.png" id="9_r11ea"]
+[ext_resource type="AudioStream" uid="uid://blm2o6qgsyaw5" path="res://Sound effects/154468__lucaslara__lightbulb-shattering_1-2.wav" id="11_uoipe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uoipe"]
+size = Vector3(1, 1.14844, 3.78516)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gjubq"]
+size = Vector3(1.94922, 0.585938, 3.29102)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o2ne0"]
 size = Vector3(0.0412884, 1, 1)
@@ -1172,7 +1179,23 @@ data = PackedVector3Array(-0.004, -0.1686, -0.1686, 0.1434, 8.3704, -0.0843, -0.
 [node name="Abandoned_House" instance=ExtResource("1_o2ne0")]
 script = ExtResource("2_la8r6")
 
-[node name="DetectaPersonagem" type="Node3D" parent="." index="0"]
+[node name="DetectaPersonagemQuebraLuz" type="Node3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.5589, 1.07248, -123.716)
+
+[node name="EntraQuarto" type="Area3D" parent="DetectaPersonagemQuebraLuz" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64275, -0.601758, -0.263168)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectaPersonagemQuebraLuz/EntraQuarto" index="0"]
+shape = SubResource("BoxShape3D_uoipe")
+
+[node name="LadoLampada" type="Area3D" parent="DetectaPersonagemQuebraLuz" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05065, -0.690321, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectaPersonagemQuebraLuz/LadoLampada" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.474609, 0, 0)
+shape = SubResource("BoxShape3D_gjubq")
+
+[node name="DetectaPersonagem" type="Node3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.7628, 0, -132.096)
 script = ExtResource("2_rnre6")
 
@@ -1518,10 +1541,14 @@ omni_attenuation = 2.0
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Lamparas/Lampara2_004" index="1"]
 transform = Transform3D(2.88604, 0, -1.69407e-21, 0, 2.88604, -2.84217e-14, 0, 0, 2.88604, -0.717905, -0.730255, 0)
 stream = ExtResource("4_5lsel")
-volume_db = -2.0
 unit_size = 5.0
 pitch_scale = 0.9
 autoplay = true
+
+[node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="Lamparas/Lampara2_004" index="2"]
+transform = Transform3D(2.88604, 0, -1.69407e-21, 0, 2.88604, -2.84217e-14, 0, 0, 2.88604, -0.741571, -0.654358, 0)
+stream = ExtResource("11_uoipe")
+volume_db = -15.673
 
 [node name="Lampara2_005" parent="Lamparas" index="7"]
 surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
@@ -1542,6 +1569,14 @@ shadow_enabled = true
 shadow_caster_mask = 4294967294
 distance_fade_enabled = true
 omni_attenuation = 2.0
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Lamparas/Lampara2_007" index="1"]
+transform = Transform3D(2.88604, 0, 1.69407e-21, 0, 2.88604, 2.84217e-14, 0, 0, 2.88604, -0.5793, -0.677002, 0)
+stream = ExtResource("4_5lsel")
+volume_db = 1.583
+unit_size = 1.0
+max_db = -2.728
+autoplay = true
 
 [node name="Lampara2_008" parent="Lamparas" index="10"]
 surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
@@ -1584,6 +1619,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_r11ea")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Lamparas/Lampara3_005" index="0"]
 transform = Transform3D(11.6916, 0, 0, 0, 11.6916, 0, 0, 0, 11.6916, 0.0276184, 5.6398, 0.276245)
+visible = false
 light_color = Color(1, 0.792157, 0.156863, 1)
 shadow_enabled = true
 shadow_caster_mask = 4294967294
@@ -2461,7 +2497,7 @@ shape = SubResource("ConcavePolygonShape3D_7tg1v")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AL/Al_010/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_xqhrp")
 
-[node name="Base" parent="." index="21"]
+[node name="Base" parent="." index="22"]
 process_mode = 4
 visible = false
 
@@ -2671,7 +2707,7 @@ shape = SubResource("ConcavePolygonShape3D_q7qe2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Baño/Tasa_Baño/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_6hk41")
 
-[node name="Casa" parent="." index="26"]
+[node name="Casa" parent="." index="27"]
 layers = 3
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Casa" index="0" groups=["Madeira"]]
@@ -2794,7 +2830,7 @@ shape = SubResource("ConcavePolygonShape3D_k4qmi")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/E/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_0jsym")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Casa/E_001" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Casa/E_001" index="0" groups=["Pedra"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/E_001/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_6x1la")
@@ -2804,7 +2840,7 @@ shape = SubResource("ConcavePolygonShape3D_6x1la")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Escalera/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_2h5sy")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Escaleras_Pisina" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Escaleras_Pisina" index="0" groups=["Azuleijo"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Escaleras_Pisina/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_2alp1")
@@ -2929,12 +2965,12 @@ shape = SubResource("ConcavePolygonShape3D_2n678")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Patio/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_l6qhw")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Pisina" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Pisina" index="0" groups=["Pedra"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Pisina/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_gtes8")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Piso_005" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Piso_005" index="0" groups=["Madeira"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Piso_005/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_xpqjd")
@@ -2954,7 +2990,7 @@ shape = SubResource("ConcavePolygonShape3D_ys5cn")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Piso_Cocina/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_j2piy")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Piso_pisina " index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Casa/Piso_pisina " index="0" groups=["Azuleijo"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa/Piso_pisina /StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_daxum")
@@ -3231,7 +3267,7 @@ shape = SubResource("ConcavePolygonShape3D_gjubq")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Casa_005/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_dtaar")
 
-[node name="Ban" parent="." index="30"]
+[node name="Ban" parent="." index="31"]
 process_mode = 4
 visible = false
 
@@ -3305,12 +3341,14 @@ shape = SubResource("ConcavePolygonShape3D_1qtef")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cylinder/StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_wkq46")
 
-[node name="Radio_001" parent="." index="33"]
+[node name="Radio_001" parent="." index="34"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.0295, 2.20069, 40.0195)
 
-[node name="Reseptor_Señal" parent="." index="34"]
+[node name="Reseptor_Señal" parent="." index="35"]
 visible = false
 
+[connection signal="body_entered" from="DetectaPersonagemQuebraLuz/EntraQuarto" to="." method="_on_entra_quarto_body_entered"]
+[connection signal="body_entered" from="DetectaPersonagemQuebraLuz/LadoLampada" to="." method="_on_lado_lampada_body_entered"]
 [connection signal="area_entered" from="DetectaPersonagem/AreaEntrada" to="DetectaPersonagem" method="_on_area_entrada_area_entered"]
 [connection signal="body_entered" from="DetectaPersonagem/AreaEntrada" to="DetectaPersonagem" method="_on_area_entrada_body_entered"]
 [connection signal="body_entered" from="DetectaPersonagem/AreaEntrada" to="DetectaPersonagem" method="_on_area_3d_body_entered"]

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ue7oeeowvsmg"
+path="res://.godot/imported/som_lanterna-10.wav-1ac734096ee8057b0cf0a6ad8c343b5e.sample"
+
+[deps]
+
+source_file="res://Sound effects/Lanterna/som_lanterna-10.wav"
+dest_files=["res://.godot/imported/som_lanterna-10.wav-1ac734096ee8057b0cf0a6ad8c343b5e.sample"]
+
+[params]
+
+force/8_bit=true
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

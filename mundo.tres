@@ -21,5 +21,5 @@ ssil_enabled = true
 glow_enabled = true
 glow_normalized = true
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.08
+volumetric_fog_density = 0.1159
 volumetric_fog_ambient_inject = 0.45

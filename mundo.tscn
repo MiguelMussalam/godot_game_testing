@@ -28,7 +28,7 @@ material = SubResource("FogMaterial_otwa2")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(-0.866024, -0.433015, 0.250001, 0.0784765, 0.376088, 0.923255, -0.493806, 0.81918, -0.29172, -56.7231, 25.7125, -144.504)
-light_color = Color(0.287309, 0.279731, 0.311896, 1)
+light_color = Color(0.0665467, 0.066048, 0.0908816, 1)
 light_bake_mode = 1
 shadow_enabled = true
 directional_shadow_blend_splits = true
@@ -37,10 +37,10 @@ directional_shadow_blend_splits = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
 
 [node name="Personagem" parent="." instance=ExtResource("2_fw4w5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.4626, -0.105242, -20.8563)
-distancia_passo_costas = 2.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.6364, 1.40686, -34.1594)
 max_pitch = 80.0
 min_pitch = -80.0
+distancia_passo_costas = 2.0
 
 [node name="Node3D" type="Node3D" parent="."]
 
@@ -51,10 +51,13 @@ light_volumetric_fog_energy = 0.0
 light_bake_mode = 1
 shadow_enabled = true
 distance_fade_shadow = 699.37
-spot_range = 673.536
-spot_attenuation = 2.0
-spot_angle = 25.61
-spot_angle_attenuation = 0.420449
+spot_range = 23.692
+spot_angle = 58.53
+spot_angle_attenuation = 0.203063
+
+[node name="SomLanterna" type="AudioStreamPlayer3D" parent="Node3D/Lanterna"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.959816, -0.538102, -0.369343)
+volume_db = 10.0
 
 [node name="Pause" type="Node" parent="."]
 process_mode = 3
