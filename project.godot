@@ -92,6 +92,10 @@ interact={
 ]
 }
 
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
 [rendering]
 
 lights_and_shadows/positional_shadow/soft_shadow_filter_quality=3

@@ -36,11 +36,11 @@ func _process(delta: float) -> void:
 		%AudioStreamPlayer3D.play()
 
 
-func _on_area_interacao_body_entered(body: Node3D) -> void:
+func _on_area_interacao_body_entered(body: CharacterBody3D) -> void:
 	if body.name == "Character":
 		pode_interagir = true
 
-func _on_area_interacao_body_exited(body: Node3D) -> void:
+func _on_area_interacao_body_exited(body: CharacterBody3D) -> void:
 	if body.name == "Character":
 		pode_interagir = false
 
@@ -48,11 +48,11 @@ func _on_area_interacao_body_exited(body: Node3D) -> void:
 func _on_audio_stream_player_3d_finished() -> void:
 	player_tv.visible = false
 
-func _on_entra_quarto_body_entered(body: Node3D) -> void:
+func _on_entra_quarto_body_entered(body: CharacterBody3D) -> void:
 	if body.name == "Character":
 		entrou_quarto = true
 
-func _on_lado_lampada_body_entered(body: Node3D) -> void:
+func _on_lado_lampada_body_entered(body: CharacterBody3D) -> void:
 	if body.name == "Character" and entrou_quarto:
 		estourou = true
 		luz_defeito.visible = true

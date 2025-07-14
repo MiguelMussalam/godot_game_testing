@@ -53,12 +53,12 @@ func _update_flashlight(delta: float):
 	
 	# Interpola suavemente entre as duas rotações.
 	# Ajuste o "8.0" para uma interpolação mais rápida ou mais lenta.
-	var slerped_quat = from_quat.slerp(to_quat, delta * 8.0)
+	var slerped_quat = from_quat.slerp(to_quat, delta * 4)
 
 	# 3. INTERPOLAR A POSIÇÃO
 	# Também interpolamos a posição para um movimento ainda mais suave,
 	# especialmente se a câmera tiver headbob.
-	var new_pos = flashlight_pivot.global_position.lerp(target_transform.origin, delta * 8.0)
+	var new_pos = flashlight_pivot.global_position.lerp(target_transform.origin, delta * 4.0)
 
 	# 4. APLICA A NOVA TRANSFORMAÇÃO GLOBAL
 	# Combina a nova posição e a nova rotação.

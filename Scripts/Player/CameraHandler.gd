@@ -47,6 +47,8 @@ var DOF_SPEED := 3
 var target_dof := DEFAULT_DOF
 
 
+
+
 func _ready() -> void:
 	default_position = camera_pivot.position
 	default_rotation = camera_pivot.rotation
@@ -71,12 +73,17 @@ func _handle_fov(delta : float) -> void:
 func _handle_dof_blur(delta : float) -> void:
 	camera.attributes.dof_blur_far_distance = lerp(camera.attributes.dof_blur_far_distance, target_dof, DOF_SPEED * delta)
 
-func _handle_head_bob(delta : float, direcao):
-	if not character.is_on_floor() and character.current_state != character.PlayerState.STEPPING_UP and character.current_state != character.PlayerState.STEPPING_DOWN:
+func _on_step_was_taken(direction: int):
+	current_impulse.x = impulse_amplitude_z_roll * direction
+	# O impulso vertical é sempre para baixo
+	current_impulse.y = -impulse_amplitude_y 
+
+func _handle_head_bob(delta: float, velocity: Vector3, is_on_floor: bool,  direcao: float):
+	if not is_on_floor and character.current_state != character.PlayerState.STEPPING_UP and character.current_state != character.PlayerState.STEPPING_DOWN:
 		camera_pivot.position = camera_pivot.position.lerp(default_position, delta * 10.0)
 		camera.rotation.z = lerp_angle(camera.rotation.z, default_rotation.z, delta * 10.0)
 		return
-	bob_time += delta * character.velocity.length() * bob_frequency
+	bob_time += delta * velocity.length() * bob_frequency
 	var lerp_weight = delta * 10.0
 	if character.current_state != character.PlayerState.IDLE:
 		var base_bob_y = sin(bob_time * bob_frequency) * bob_amplitude_y

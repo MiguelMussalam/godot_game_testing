@@ -23,6 +23,9 @@ var running := false
 var deu_passo := false
 var estava_no_ar := false
 
+signal state_changed(new_state: int)
+signal new_velocity(new_velocity: float)
+
 func _unhandled_input(event) -> void:
 
 	if event is InputEventKey:
@@ -41,6 +44,7 @@ func _update_state(input_dir) -> void:
 			character.current_state = character.PlayerState.WALKING_BACKWARDS
 		else: # Andando para frente/lados
 			character.current_state = character.PlayerState.WALKING
+	state_changed.emit(character.current_state)
 
 func _update_speed() -> void:
 	if character.current_state == character.PlayerState.RUNNING:
@@ -102,4 +106,4 @@ func handle_movement(delta : float, input_dir : Vector2) -> void:
 		character.velocity.z = move_toward(character.velocity.z, 0, velocidade_atual)
 		character.current_state = character.PlayerState.IDLE
 
-	#character.move_and_slide()
+	character.move_and_slide()

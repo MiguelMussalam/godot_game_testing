@@ -234,7 +234,6 @@ mesh = SubResource("QuadMesh_114o1")
 [node name="StepSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.06896, 0)
 stream = SubResource("AudioStreamWAV_s304p")
-panning_strength = 3.0
 
 [node name="StairstepRCGroup" type="Node3D" parent="."]
 
@@ -267,25 +266,29 @@ script = ExtResource("22_r0k1t")
 character = NodePath("../..")
 camera = NodePath("../../CameraPivot/Camera3D")
 camera_pivot = NodePath("../../CameraPivot")
-
-[node name="FlashlightHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("flashlight", "flashlight_pivot", "flashlight_sound", "camera")]
-script = ExtResource("23_kbu3h")
-flashlight = NodePath("../../FlashlightPivot/Flashlight")
-flashlight_pivot = NodePath("../../FlashlightPivot")
-flashlight_sound = NodePath("../../FlashlightPivot/Flashlight/FlashlightSound")
-camera = NodePath("../../CameraPivot/Camera3D")
-
-[node name="FootstepsHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "step_sound", "camera_handler", "RCGroundGroup")]
-script = ExtResource("24_bfwjx")
-character = NodePath("../..")
-step_sound = NodePath("../../StepSound")
-camera_handler = NodePath("../CameraHandler")
-RCGroundGroup = NodePath("../../RCGroundGroup")
+ZOOM_SPEED = 3.5
+bob_amplitude_y = 0.02
+bob_amplitude_z_roll = 0.01
+noise_intensity_y = 0.1
+noise_intensity_z_roll = 0.3
+idle_sway_frequency = 1.0
+impulse_amplitude_y = 0.03
+impulse_amplitude_z_roll = 0.03
 
 [node name="MouseHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "camera_pivot")]
 script = ExtResource("25_jmsi1")
 character = NodePath("../..")
 camera_pivot = NodePath("../../CameraPivot")
+
+[node name="FootstepsHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "step_sound", "RCGroundGroup")]
+script = ExtResource("24_bfwjx")
+character = NodePath("../..")
+step_sound = NodePath("../../StepSound")
+RCGroundGroup = NodePath("../../RCGroundGroup")
+step_distance_walking = 1.5
+step_distance_backwards = 1.5
+step_distance_stepping_up = 0.3
+step_distance_stepping_down = 0.3
 
 [node name="MovementHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "foot", "stairstepRCGroup", "RCFrontHigh", "RCFrontLow", "RCFrontDown", "RCTopDown")]
 script = ExtResource("26_lg31i")
@@ -296,3 +299,13 @@ RCFrontHigh = NodePath("../../StairstepRCGroup/RayCastFrontHigh")
 RCFrontLow = NodePath("../../StairstepRCGroup/RayCastFrontLow")
 RCFrontDown = NodePath("../../StairstepRCGroup/RayCastFrontDown")
 RCTopDown = NodePath("../../StairstepRCGroup/RayCastTopDown")
+walk_speed = 2.0
+backwards_speed = 1.0
+stepping_up_speed = 1.0
+
+[node name="FlashlightHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("flashlight", "flashlight_pivot", "flashlight_sound", "camera")]
+script = ExtResource("23_kbu3h")
+flashlight = NodePath("../../FlashlightPivot/Flashlight")
+flashlight_pivot = NodePath("../../FlashlightPivot")
+flashlight_sound = NodePath("../../FlashlightPivot/Flashlight/FlashlightSound")
+camera = NodePath("../../CameraPivot/Camera3D")

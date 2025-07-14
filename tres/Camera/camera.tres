@@ -2,6 +2,7 @@
 
 [resource]
 auto_exposure_enabled = true
+auto_exposure_scale = 10.24
 dof_blur_far_enabled = true
 dof_blur_near_enabled = true
 auto_exposure_min_sensitivity = 474.72

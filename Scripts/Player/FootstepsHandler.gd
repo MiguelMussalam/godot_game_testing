@@ -1,9 +1,10 @@
 extends Node
 
+signal step_was_taken(impulse_direction: int)
+
 @export_group("Nodes")
 @export var character : CharacterBody3D
 @export var step_sound : AudioStreamPlayer3D
-@export var camera_handler : Node
 @export var RCGroundGroup : RayCast3D
 
 @export_group("Passos")
@@ -13,7 +14,9 @@ extends Node
 @export var step_distance_stepping_up: float = 1.0
 @export var step_distance_stepping_down: float = 0.7
 
+var current_state := 0
 var travelled_distance: float = 0.0 # Acumulador da distância percorrida
+var necessary_distance: float
 var stepped := false
 
 ## Sons passos
@@ -67,60 +70,54 @@ var step_right := false
 		load("res://Audio/SoundEffects/Footsteps/Rock/Footsteps_Rock_Walk_09.wav")
 	]
 }
+	
+
+func _on_state_changed(new_state: int):
+	current_state = new_state
+	match new_state:
+		character.PlayerState.RUNNING:
+			necessary_distance = step_distance_running
+		character.PlayerState.WALKING:
+			necessary_distance = step_distance_walking
+		character.PlayerState.WALKING_BACKWARDS:
+			necessary_distance = step_distance_backwards
+		character.PlayerState.STEPPING_UP:
+			necessary_distance = step_distance_stepping_up
+		character.PlayerState.STEPPING_DOWN:
+			necessary_distance = step_distance_stepping_down
+		_:
+			necessary_distance = 999.0 # Uma distância "infinita" para o estado IDLE
+	print(necessary_distance)
 
 ## A nova função de passo baseada em distância
-func handle_step(delta : float, force_step : bool):
-	var necessary_distance: float
-	
+func handle_step(delta : float, velocity: Vector3, is_on_floor : bool, force_step : bool):
+
 	if force_step:
 		necessary_distance = 0.0
 		if travelled_distance > necessary_distance:
 			stepped = true
 			handle_step_sound()
 			# O sinal do roll alterna a cada passo (esquerda/direita)
-			var dir : int
-			if step_right:
-				dir = 1
-			else:
-				dir = -1
-			camera_handler.current_impulse.x = camera_handler.impulse_amplitude_z_roll * dir
-			# O impulso vertical é sempre para baixo
-			camera_handler.current_impulse.y = -camera_handler.impulse_amplitude_y 
-			travelled_distance -= necessary_distance
+			var dir = 1 if step_right else -1
+			step_was_taken.emit(dir)
+			travelled_distance = 0.0
 		else:
 			stepped = false
 		return
-	if not character.is_on_floor():
+	if not is_on_floor:
 		stepped = false
 		return
 
-	if character.is_on_floor() and character.current_state != character.PlayerState.IDLE and force_step == false:
-		var horizontal_velocity = character.velocity * Vector3(1, 0, 1)
+	if is_on_floor and current_state != 0 and force_step == false:
+		var horizontal_velocity = velocity * Vector3(1, 0, 1)
 		travelled_distance += horizontal_velocity.length() * delta
-	
-		if character.current_state == character.PlayerState.RUNNING:
-			necessary_distance = step_distance_running
-		elif character.current_state == character.PlayerState.WALKING:
-			necessary_distance = step_distance_walking
-		elif character.current_state == character.PlayerState.WALKING_BACKWARDS:
-			necessary_distance = step_distance_backwards
-		elif character.current_state == character.PlayerState.STEPPING_UP:
-			necessary_distance = step_distance_stepping_up
-		elif character.current_state == character.PlayerState.STEPPING_DOWN:
-			necessary_distance = step_distance_stepping_down
 
 		if travelled_distance > necessary_distance:
 			stepped = true
 			handle_step_sound()
 			# O sinal do roll alterna a cada passo (esquerda/direita)
-			var dir : int
-			if step_right:
-				dir = 1
-			else:
-				dir = -1
-			camera_handler.current_impulse.x = camera_handler.impulse_amplitude_z_roll * dir
-			# O impulso vertical é sempre para baixo
-			camera_handler.current_impulse.y = -camera_handler.impulse_amplitude_y 
+			var dir = 1 if step_right else -1
+			step_was_taken.emit(dir)
 			travelled_distance -= necessary_distance
 		else:
 			stepped = false

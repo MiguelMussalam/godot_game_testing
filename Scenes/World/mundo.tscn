@@ -3,7 +3,7 @@
 [ext_resource type="VoxelGIData" uid="uid://dy0bvgrqhg4tc" path="res://tres/VoxelGI/mundo.VoxelGI_data.res" id="1_qulwv"]
 [ext_resource type="Environment" uid="uid://du8jtbh03v3oj" path="res://tres/World/mundo.tres" id="2_64uv6"]
 [ext_resource type="PackedScene" uid="uid://bdyskr836c5gu" path="res://Scenes/AbandonedHouse/abandoned_house.tscn" id="3_lbgy0"]
-[ext_resource type="PackedScene" uid="uid://bgexwc2e1thjw" path="res://Scenes/Player/personagem.tscn" id="4_hxexp"]
+[ext_resource type="PackedScene" uid="uid://bgexwc2e1thjw" path="res://Scenes/Player/Character.tscn" id="4_hxexp"]
 [ext_resource type="Script" uid="uid://cwej7yenb3w1o" path="res://Scripts/UI/pause.gd" id="5_5kblv"]
 [ext_resource type="AudioStream" uid="uid://lsqfo8q0wk56" path="res://Audio/SoundEffects/Ambient/524203__filmmakersmanual__forest-wind-04.wav" id="6_gebdh"]
 [ext_resource type="AudioStream" uid="uid://twoeo4ic1rpj" path="res://Audio/Music/musica_ambiente.wav" id="7_vtl8y"]
@@ -35,7 +35,7 @@ directional_shadow_blend_splits = true
 [node name="Abandoned_House" parent="." instance=ExtResource("3_lbgy0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
 
-[node name="Personagem" parent="." instance=ExtResource("4_hxexp")]
+[node name="Character" parent="." instance=ExtResource("4_hxexp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.155, 0.385254, -41.811)
 
 [node name="Pause" type="Node" parent="."]
