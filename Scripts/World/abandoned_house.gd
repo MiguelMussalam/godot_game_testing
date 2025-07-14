@@ -30,18 +30,18 @@ func _process(delta: float) -> void:
 			som_luz.stop()
 		_agendar_proximo_piscar()
 
-	if pode_interagir and Input.is_action_just_pressed("interagir") and player_tv.visible == false:
+	if pode_interagir and Input.is_action_just_pressed("interact") and player_tv.visible == false:
 		player_tv.visible = true
 		%VideoStreamPlayer.play()
 		%AudioStreamPlayer3D.play()
 
 
 func _on_area_interacao_body_entered(body: Node3D) -> void:
-	if body.name == "Personagem":
+	if body.name == "Character":
 		pode_interagir = true
 
 func _on_area_interacao_body_exited(body: Node3D) -> void:
-	if body.name == "Personagem":
+	if body.name == "Character":
 		pode_interagir = false
 
 
@@ -49,11 +49,11 @@ func _on_audio_stream_player_3d_finished() -> void:
 	player_tv.visible = false
 
 func _on_entra_quarto_body_entered(body: Node3D) -> void:
-	if body.name == "Personagem":
+	if body.name == "Character":
 		entrou_quarto = true
 
 func _on_lado_lampada_body_entered(body: Node3D) -> void:
-	if body.name == "Personagem" and entrou_quarto:
+	if body.name == "Character" and entrou_quarto:
 		estourou = true
 		luz_defeito.visible = true
 		lampada.get_surface_override_material(0).emission_enabled = true

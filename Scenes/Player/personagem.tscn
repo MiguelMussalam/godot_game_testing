@@ -1,6 +1,6 @@
-[gd_scene load_steps=36 format=3 uid="uid://bgexwc2e1thjw"]
+[gd_scene load_steps=41 format=3 uid="uid://bgexwc2e1thjw"]
 
-[ext_resource type="Script" uid="uid://bf0xsrf04cvee" path="res://Scripts/Player/personagem.gd" id="1_s304p"]
+[ext_resource type="Script" uid="uid://bf0xsrf04cvee" path="res://Scripts/Player/Character.gd" id="1_s304p"]
 [ext_resource type="Shader" uid="uid://ojn30tjnrwb3" path="res://Shaders/AberraçãoCromatica.gdshader" id="2_vvf27"]
 [ext_resource type="Shader" uid="uid://u7slv08615om" path="res://Shaders/ps1.gdshader" id="3_k0c8s"]
 [ext_resource type="CameraAttributesPractical" uid="uid://cbtbc0eg3mn3w" path="res://tres/Camera/camera.tres" id="3_p7k75"]
@@ -21,6 +21,15 @@
 [ext_resource type="Script" uid="uid://gsmeout6w0t6" path="res://addons/SphynxMotionBlurToolkit/BaseClasses/mb_compositor.gd" id="15_73hqi"]
 [ext_resource type="Shader" uid="uid://dxal02hh8asln" path="res://Shaders/LensFlare.gdshader" id="19_cidpc"]
 [ext_resource type="Texture2D" uid="uid://crv00y6mhe44y" path="res://Shaders/lens-flare-light-special-effect-background-free-png.png" id="20_4cdg6"]
+[ext_resource type="Script" uid="uid://bm6j7ob01o01i" path="res://Scripts/Player/CameraHandler.gd" id="22_r0k1t"]
+[ext_resource type="Script" uid="uid://dxtppung0nuti" path="res://Scripts/Player/FlashlightHandler.gd" id="23_kbu3h"]
+[ext_resource type="Script" uid="uid://6d6gbtafin58" path="res://Scripts/Player/FootstepsHandler.gd" id="24_bfwjx"]
+[ext_resource type="Script" uid="uid://cn6thtb88kwvx" path="res://Scripts/Player/MouseHandler.gd" id="25_jmsi1"]
+[ext_resource type="Script" uid="uid://b3kdjh5quomwy" path="res://Scripts/Player/MovementHandler.gd" id="26_lg31i"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_s304p"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vvf27"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_qy06j"]
 resource_local_to_scene = false
@@ -126,28 +135,41 @@ material = SubResource("ShaderMaterial_s3elh")
 flip_faces = true
 size = Vector2(2, 2)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_s304p"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vvf27"]
-
 [sub_resource type="AudioStreamWAV" id="AudioStreamWAV_s304p"]
 
-[node name="Personagem" type="CharacterBody3D"]
+[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("movement_handler", "mouse_handler", "camera_handler", "footsteps_handler", "flashlight_handler")]
 script = ExtResource("1_s304p")
-VELOCIDADE_COSTAS = 1.4
-VELOCIDADE_DESCENDO_ESCADA = 0.3
-distancia_escada_descendo = 1.0
-bob_frequency = 1.5
-bob_amplitude_y = 0.01
-bob_amplitude_z_roll = 0.01
-noise_intensity_y = 0.5
-idle_sway_frequency = 0.85
-idle_sway_amplitude = 0.015
-impulse_amplitude_y = 0.05
-impulse_amplitude_z_roll = 0.02
+movement_handler = NodePath("HandlerNodes/MovementHandler")
+mouse_handler = NodePath("HandlerNodes/MouseHandler")
+camera_handler = NodePath("HandlerNodes/CameraHandler")
+footsteps_handler = NodePath("HandlerNodes/FootstepsHandler")
+flashlight_handler = NodePath("HandlerNodes/FlashlightHandler")
 
-[node name="Pé" type="Node3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("CapsuleMesh_s304p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_vvf27")
+
+[node name="Foot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.820433, 0)
+
+[node name="FlashlightPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.917497, 0)
+
+[node name="Flashlight" type="SpotLight3D" parent="FlashlightPivot"]
+light_color = Color(0.98449, 0.960169, 0.891614, 1)
+light_volumetric_fog_energy = 0.0
+light_bake_mode = 1
+shadow_enabled = true
+distance_fade_shadow = 699.37
+spot_range = 23.692
+spot_angle = 28.21
+
+[node name="FlashlightSound" type="AudioStreamPlayer3D" parent="FlashlightPivot/Flashlight"]
+volume_db = 10.0
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537958, 0)
@@ -209,39 +231,68 @@ mouse_filter = 2
 visible = false
 mesh = SubResource("QuadMesh_114o1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("CapsuleMesh_s304p")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_vvf27")
-
-[node name="Passos" type="AudioStreamPlayer3D" parent="."]
+[node name="StepSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.06896, 0)
 stream = SubResource("AudioStreamWAV_s304p")
 panning_strength = 3.0
 
-[node name="Degrau" type="Node3D" parent="."]
+[node name="StairstepRCGroup" type="Node3D" parent="."]
 
-[node name="RayCastFrontHigh" type="RayCast3D" parent="Degrau"]
+[node name="RayCastFrontHigh" type="RayCast3D" parent="StairstepRCGroup"]
 transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.369141, 0)
 target_position = Vector3(0, 0, -0.385)
 collide_with_areas = true
 
-[node name="RayCastFrontLow" type="RayCast3D" parent="Degrau"]
+[node name="RayCastFrontLow" type="RayCast3D" parent="StairstepRCGroup"]
 transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 0)
 target_position = Vector3(0, 0, -0.385)
 collide_with_areas = true
 
-[node name="RayCastTopDown" type="RayCast3D" parent="Degrau"]
+[node name="RayCastTopDown" type="RayCast3D" parent="StairstepRCGroup"]
 transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.263, -0.372113)
 target_position = Vector3(0, -2.25, 0)
 collide_with_areas = true
 
-[node name="RayCastFrontDown" type="RayCast3D" parent="Degrau"]
+[node name="RayCastFrontDown" type="RayCast3D" parent="StairstepRCGroup"]
 transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.373515)
 target_position = Vector3(0, -1.5, 0)
 
-[node name="ChecaGrupoChao" type="RayCast3D" parent="."]
+[node name="RCGroundGroup" type="RayCast3D" parent="."]
 target_position = Vector3(0, -1.45, 0)
+
+[node name="HandlerNodes" type="Node" parent="."]
+
+[node name="CameraHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "camera", "camera_pivot")]
+script = ExtResource("22_r0k1t")
+character = NodePath("../..")
+camera = NodePath("../../CameraPivot/Camera3D")
+camera_pivot = NodePath("../../CameraPivot")
+
+[node name="FlashlightHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("flashlight", "flashlight_pivot", "flashlight_sound", "camera")]
+script = ExtResource("23_kbu3h")
+flashlight = NodePath("../../FlashlightPivot/Flashlight")
+flashlight_pivot = NodePath("../../FlashlightPivot")
+flashlight_sound = NodePath("../../FlashlightPivot/Flashlight/FlashlightSound")
+camera = NodePath("../../CameraPivot/Camera3D")
+
+[node name="FootstepsHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "step_sound", "camera_handler", "RCGroundGroup")]
+script = ExtResource("24_bfwjx")
+character = NodePath("../..")
+step_sound = NodePath("../../StepSound")
+camera_handler = NodePath("../CameraHandler")
+RCGroundGroup = NodePath("../../RCGroundGroup")
+
+[node name="MouseHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "camera_pivot")]
+script = ExtResource("25_jmsi1")
+character = NodePath("../..")
+camera_pivot = NodePath("../../CameraPivot")
+
+[node name="MovementHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "foot", "stairstepRCGroup", "RCFrontHigh", "RCFrontLow", "RCFrontDown", "RCTopDown")]
+script = ExtResource("26_lg31i")
+character = NodePath("../..")
+foot = NodePath("../../Foot")
+stairstepRCGroup = NodePath("../../StairstepRCGroup")
+RCFrontHigh = NodePath("../../StairstepRCGroup/RayCastFrontHigh")
+RCFrontLow = NodePath("../../StairstepRCGroup/RayCastFrontLow")
+RCFrontDown = NodePath("../../StairstepRCGroup/RayCastFrontDown")
+RCTopDown = NodePath("../../StairstepRCGroup/RayCastTopDown")

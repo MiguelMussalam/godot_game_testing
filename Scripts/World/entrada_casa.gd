@@ -11,13 +11,13 @@ var som_alvo := -80.0
 var som_atual := -13.0
 
 func _on_area_entrada_body_entered(body: Node3D) -> void:
-	if body.name == "Personagem":
+	if body.name == "Character":
 		cutoff_alvo = 1000.0
 		som_alvo = -80.0
 		ruido_fora.play()
 
 func _on_area_saída_body_entered(body: Node3D) -> void:
-	if body.name == "Personagem":
+	if body.name == "Character":
 		cutoff_alvo = 22000.0
 		som_alvo = -10.0
 		var nodo = get_tree().get_current_scene().get_node("Musica")

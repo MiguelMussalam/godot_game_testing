@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://d4djhv5aknj44"
-path="res://.godot/imported/som_lanterna-04.wav-ed8f1622479cc381bb13ae3072be8c63.sample"
+path="res://.godot/imported/flashlight_sound-03.wav-d0d90ad0423b7b687b879581e5a30106.sample"
 
 [deps]
 
-source_file="res://Audio/SoundEffects/Flashlight/som_lanterna-04.wav"
-dest_files=["res://.godot/imported/som_lanterna-04.wav-ed8f1622479cc381bb13ae3072be8c63.sample"]
+source_file="res://Audio/SoundEffects/Flashlight/flashlight_sound-03.wav"
+dest_files=["res://.godot/imported/flashlight_sound-03.wav-d0d90ad0423b7b687b879581e5a30106.sample"]
 
 [params]
 
