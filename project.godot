@@ -14,6 +14,10 @@ config/name="teste"
 run/main_scene="uid://bheyky50oypth"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
+[audio]
+
+buses/default_bus_layout="res://tres/AudioBus/default_bus_layout.tres"
+
 [display]
 
 window/size/viewport_width=1920
@@ -30,10 +34,10 @@ enabled=PackedStringArray("res://addons/SphynxMotionBlurToolkit/plugin.cfg")
 
 [global_group]
 
-Madeira=""
-Grama=""
-Pedra=""
-Azuleijo=""
+Tile=""
+Rock=""
+Wood=""
+Grass=""
 
 [input]
 
@@ -90,5 +94,13 @@ interagir={
 
 [rendering]
 
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=3
 camera/depth_of_field/depth_of_field_bokeh_shape=2
-camera/depth_of_field/depth_of_field_bokeh_quality=2
+camera/depth_of_field/depth_of_field_bokeh_quality=3
+camera/depth_of_field/depth_of_field_use_jitter=true
+anti_aliasing/quality/msaa_3d=1
+environment/screen_space_reflection/roughness_quality=2
+environment/subsurface_scattering/subsurface_scattering_quality=2
+anti_aliasing/quality/screen_space_aa=1
+anti_aliasing/quality/use_taa=true
+occlusion_culling/use_occlusion_culling=true

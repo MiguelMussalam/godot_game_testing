@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://bheyky50oypth"]
+
+[ext_resource type="VoxelGIData" uid="uid://dy0bvgrqhg4tc" path="res://tres/VoxelGI/mundo.VoxelGI_data.res" id="1_qulwv"]
+[ext_resource type="Environment" uid="uid://du8jtbh03v3oj" path="res://tres/World/mundo.tres" id="2_64uv6"]
+[ext_resource type="PackedScene" uid="uid://bdyskr836c5gu" path="res://Scenes/AbandonedHouse/abandoned_house.tscn" id="3_lbgy0"]
+[ext_resource type="PackedScene" uid="uid://bgexwc2e1thjw" path="res://Scenes/Player/personagem.tscn" id="4_hxexp"]
+[ext_resource type="Script" uid="uid://cwej7yenb3w1o" path="res://Scripts/UI/pause.gd" id="5_5kblv"]
+[ext_resource type="AudioStream" uid="uid://lsqfo8q0wk56" path="res://Audio/SoundEffects/Ambient/524203__filmmakersmanual__forest-wind-04.wav" id="6_gebdh"]
+[ext_resource type="AudioStream" uid="uid://twoeo4ic1rpj" path="res://Audio/Music/musica_ambiente.wav" id="7_vtl8y"]
+
+[sub_resource type="FogMaterial" id="FogMaterial_otwa2"]
+density = -1.0
+
+[node name="mundo" type="Node3D"]
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+size = Vector3(389.323, 74.417, 398.35)
+data = ExtResource("1_qulwv")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_64uv6")
+
+[node name="FogVolume" type="FogVolume" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.5764, 1.68654, -35.6612)
+size = Vector3(35.7428, 10.4023, 20.3835)
+material = SubResource("FogMaterial_otwa2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.675539, 0.737325, 0, -0.737325, 0.675539, 0, 3.92801, 0)
+light_color = Color(0, 0, 0, 1)
+light_bake_mode = 1
+shadow_enabled = true
+directional_shadow_blend_splits = true
+
+[node name="Abandoned_House" parent="." instance=ExtResource("3_lbgy0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 92.4439)
+
+[node name="Personagem" parent="." instance=ExtResource("4_hxexp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1766, 1.40686, -41.811)
+max_pitch = 80.0
+min_pitch = -80.0
+distancia_passo_costas = 2.0
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Lanterna" type="SpotLight3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.2683, 0.538102, -23.9831)
+light_color = Color(0.98449, 0.960169, 0.891614, 1)
+light_volumetric_fog_energy = 0.0
+light_bake_mode = 1
+shadow_enabled = true
+distance_fade_shadow = 699.37
+spot_range = 23.692
+spot_angle = 28.21
+
+[node name="SomLanterna" type="AudioStreamPlayer3D" parent="Node3D/Lanterna"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.959816, -0.538102, -0.369343)
+volume_db = 10.0
+
+[node name="Pause" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("5_5kblv")
+
+[node name="Audio_background" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_gebdh")
+volume_db = -30.0
+pitch_scale = 0.8
+autoplay = true
+bus = &"Background"
+
+[node name="Musica" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_vtl8y")
+bus = &"Música"
