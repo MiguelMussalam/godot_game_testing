@@ -1,3 +1,4 @@
+class_name MouseHandler
 extends Node
 
 ## - CODE FROM "Yo Soy Freeman" -> github: https://yosoyfreeman.github.io/

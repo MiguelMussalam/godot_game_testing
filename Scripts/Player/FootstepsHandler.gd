@@ -1,3 +1,4 @@
+class_name FootstepsHandler
 extends Node
 
 signal step_was_taken(impulse_direction: int)

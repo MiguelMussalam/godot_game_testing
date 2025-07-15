@@ -179,7 +179,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.379539, 0)
 attributes = ExtResource("3_p7k75")
 compositor = SubResource("Compositor_asatx")
 current = true
-fov = 67.175
+fov = 60.0
 far = 270.51
 
 [node name="Aberracao" type="CanvasLayer" parent="CameraPivot/Camera3D"]
@@ -231,6 +231,9 @@ mouse_filter = 2
 visible = false
 mesh = SubResource("QuadMesh_114o1")
 
+[node name="RayCastDOF" type="RayCast3D" parent="CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -2)
+
 [node name="StepSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.06896, 0)
 stream = SubResource("AudioStreamWAV_s304p")
@@ -261,11 +264,12 @@ target_position = Vector3(0, -1.45, 0)
 
 [node name="HandlerNodes" type="Node" parent="."]
 
-[node name="CameraHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "camera", "camera_pivot")]
+[node name="CameraHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "camera", "camera_pivot", "RCDOF_blur")]
 script = ExtResource("22_r0k1t")
 character = NodePath("../..")
 camera = NodePath("../../CameraPivot/Camera3D")
 camera_pivot = NodePath("../../CameraPivot")
+RCDOF_blur = NodePath("../../CameraPivot/Camera3D/RayCastDOF")
 ZOOM_SPEED = 3.5
 bob_amplitude_y = 0.02
 bob_amplitude_z_roll = 0.01

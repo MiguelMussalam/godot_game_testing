@@ -1,5 +1,5 @@
+class_name  MovementHandler
 extends Node
-
 
 @export_group("Nodes")
 @export var character : CharacterBody3D
@@ -17,11 +17,7 @@ extends Node
 @export var stepping_up_speed := 2.0
 @export var stepping_down_speed := 1.0
 var speed = walk_speed
-var movendo := false
-var costas := false
 var running := false
-var deu_passo := false
-var estava_no_ar := false
 
 signal state_changed(new_state: int)
 signal new_velocity(new_velocity: float)

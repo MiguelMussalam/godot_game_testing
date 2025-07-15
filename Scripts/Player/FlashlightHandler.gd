@@ -1,3 +1,4 @@
+class_name FlashlightHandler
 extends Node
 
 ## - nodes
