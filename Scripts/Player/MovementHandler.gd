@@ -16,7 +16,7 @@ extends Node
 @export var backwards_speed := 2.0
 @export var stepping_up_speed := 2.0
 @export var stepping_down_speed := 1.0
-var velocidade_atual = walk_speed
+var speed = walk_speed
 var movendo := false
 var costas := false
 var running := false
@@ -48,15 +48,15 @@ func _update_state(input_dir) -> void:
 
 func _update_speed() -> void:
 	if character.current_state == character.PlayerState.RUNNING:
-		velocidade_atual = run_speed
+		speed = run_speed
 	elif character.current_state == character.PlayerState.WALKING:
-		velocidade_atual = walk_speed
+		speed = walk_speed
 	elif character.current_state == character.PlayerState.WALKING_BACKWARDS:
-		velocidade_atual = backwards_speed
+		speed = backwards_speed
 	elif character.current_state == character.PlayerState.STEPPING_UP:
-		velocidade_atual = stepping_up_speed
+		speed = stepping_up_speed
 	elif character.current_state == character.PlayerState.STEPPING_DOWN:
-		velocidade_atual = stepping_down_speed
+		speed = stepping_down_speed
 
 func apply_gravity(delta) -> void:
 	if not character.is_on_floor() or not character.is_on_wall():
@@ -69,7 +69,9 @@ func stairstep_check(delta : float) -> void:
 	
 	## subindo degrau
 	if low_collide and not high_collide:
-		character.current_state = character.PlayerState.STEPPING_UP
+		if character.current_state != character.PlayerState.STEPPING_UP:
+			character.current_state = character.PlayerState.STEPPING_UP
+			state_changed.emit(character.current_state)
 		RCFrontHigh.force_raycast_update()
 		step_height = RCTopDown.get_collision_point().y
 		step_height = step_height - foot.global_position.y
@@ -82,7 +84,9 @@ func stairstep_check(delta : float) -> void:
 	## Descendo degrau
 	if collision_below and in_range and character.current_state != character.PlayerState.STEPPING_UP:
 		if not character.is_on_floor():
-			character.current_state = character.PlayerState.STEPPING_DOWN
+			if character.current_state != character.PlayerState.STEPPING_DOWN:
+				character.current_state = character.PlayerState.STEPPING_DOWN
+				state_changed.emit(character.current_state)
 			character.velocity.y = -2.5
 
 func _update_step_raycasts(direction) -> void:
@@ -99,11 +103,13 @@ func handle_movement(delta : float, input_dir : Vector2) -> void:
 		stairstep_check(delta)
 		_update_speed()
 		
-		character.velocity.x = direction.x * velocidade_atual
-		character.velocity.z = direction.z * velocidade_atual
+		character.velocity.x = direction.x * speed
+		character.velocity.z = direction.z * speed
 	else:
-		character.velocity.x = move_toward(character.velocity.x, 0, velocidade_atual)
-		character.velocity.z = move_toward(character.velocity.z, 0, velocidade_atual)
-		character.current_state = character.PlayerState.IDLE
+		character.velocity.x = move_toward(character.velocity.x, 0, speed)
+		character.velocity.z = move_toward(character.velocity.z, 0, speed)
+		if character.current_state != character.PlayerState.IDLE:
+			character.current_state = character.PlayerState.IDLE
+			state_changed.emit(character.current_state)
 
 	character.move_and_slide()

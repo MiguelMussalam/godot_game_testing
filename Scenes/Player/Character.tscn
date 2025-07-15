@@ -287,8 +287,6 @@ step_sound = NodePath("../../StepSound")
 RCGroundGroup = NodePath("../../RCGroundGroup")
 step_distance_walking = 1.5
 step_distance_backwards = 1.5
-step_distance_stepping_up = 0.3
-step_distance_stepping_down = 0.3
 
 [node name="MovementHandler" type="Node" parent="HandlerNodes" node_paths=PackedStringArray("character", "foot", "stairstepRCGroup", "RCFrontHigh", "RCFrontLow", "RCFrontDown", "RCTopDown")]
 script = ExtResource("26_lg31i")
