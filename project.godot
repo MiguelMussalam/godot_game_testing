@@ -22,6 +22,7 @@ buses/default_bus_layout="res://tres/AudioBus/default_bus_layout.tres"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/vsync/vsync_mode=0
 
 [editor]
 
@@ -30,7 +31,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/SphynxMotionBlurToolkit/plugin.cfg")
+enabled=PackedStringArray("res://addons/SphynxMotionBlurToolkit/plugin.cfg", "res://addons/giga_audio/plugin.cfg")
 
 [global_group]
 
@@ -102,6 +103,7 @@ lights_and_shadows/positional_shadow/soft_shadow_filter_quality=3
 camera/depth_of_field/depth_of_field_bokeh_shape=2
 camera/depth_of_field/depth_of_field_bokeh_quality=3
 camera/depth_of_field/depth_of_field_use_jitter=true
+environment/ssao/quality=3
 anti_aliasing/quality/msaa_2d=1
 anti_aliasing/quality/msaa_3d=1
 environment/screen_space_reflection/roughness_quality=2

@@ -26,6 +26,7 @@ func _ready() -> void:
 	flashlight_sound.position = flashlight_pivot.position
 	
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
 		if Input.is_action_just_pressed("flashlight"):
 			activate_flashlight()
 

@@ -93,10 +93,10 @@ shader_parameter/aberration_strength = 0.01
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_114o1"]
 shader = ExtResource("4_s3elh")
-shader_parameter/grain_intensity = 0.159
+shader_parameter/grain_intensity = 0.147
 shader_parameter/min_lum = 0.0
 shader_parameter/max_lum = 1.0
-shader_parameter/time_scale = 0.5
+shader_parameter/time_scale = 0.012
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gn376"]
 shader = ExtResource("5_114o1")
