@@ -160,13 +160,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.820433, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.917497, 0)
 
 [node name="Flashlight" type="SpotLight3D" parent="FlashlightPivot"]
-light_color = Color(0.98449, 0.960169, 0.891614, 1)
+light_color = Color(0.959676, 0.896895, 0.721627, 1)
 light_volumetric_fog_energy = 0.0
 light_bake_mode = 1
 shadow_enabled = true
 distance_fade_shadow = 699.37
 spot_range = 23.692
-spot_angle = 28.21
+spot_angle = 26.32
 
 [node name="FlashlightSound" type="AudioStreamPlayer3D" parent="FlashlightPivot/Flashlight"]
 volume_db = 10.0
@@ -237,6 +237,7 @@ target_position = Vector3(0, 0, -2)
 [node name="StepSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.06896, 0)
 stream = SubResource("AudioStreamWAV_s304p")
+bus = &"Steps"
 
 [node name="StairstepRCGroup" type="Node3D" parent="."]
 
